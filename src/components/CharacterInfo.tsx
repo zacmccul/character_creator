@@ -1,72 +1,174 @@
 /**
  * Character Info Component
- * Basic character information: name, species, and experience
+ * Configuration-driven character information fields
  */
 
+import { useEffect, useState } from 'react';
 import { Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import { NativeSelectRoot, NativeSelectField } from '@/components/ui/native-select';
 import { useCharacterStore } from '@/stores/character.store';
 import { Species, Experience } from '@/types/character.types';
 import { ChangeEvent } from 'react';
+import type { CharacterInfoConfig, FieldConfig } from '@/types/character-info-config.types';
+import { configManager } from '@/utils/config-manager';
 
 export const CharacterInfo = () => {
-  const { character, updateName, updateSpecies, updateExperience } =
-    useCharacterStore();
+  const { character, updateName, updateSpecies, updateExperience } = useCharacterStore();
+  const [config, setConfig] = useState<CharacterInfoConfig | null>(null);
+  const [configError, setConfigError] = useState<string | null>(null);
+
+  // Load configuration on mount
+  useEffect(() => {
+    configManager.loadAllConfigs()
+      .then((result) => {
+        if (result.success) {
+          setConfig(result.config.characterInfo);
+        } else {
+          const errorMsg = configManager.formatErrors(result.errors);
+          setConfigError(errorMsg);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load configuration:', error);
+        setConfigError(error.message);
+      });
+  }, []);
+
+  const handleFieldChange = (fieldId: string, value: string) => {
+    // Map field IDs to store actions
+    // TODO: Make this more dynamic in the future
+    switch (fieldId) {
+      case 'name':
+        updateName(value);
+        break;
+      case 'character_species':
+        updateSpecies(value as Species);
+        break;
+      case 'character_experience':
+        updateExperience(value as Experience);
+        break;
+      default:
+        console.warn(`Unknown field ID: ${fieldId}`);
+    }
+  };
+
+  const getFieldValue = (fieldId: string): string => {
+    // Map field IDs to character values
+    switch (fieldId) {
+      case 'name':
+        return character.name;
+      case 'character_species':
+        return character.species;
+      case 'character_experience':
+        return character.experience;
+      default:
+        return '';
+    }
+  };
+
+  const renderField = (field: FieldConfig) => {
+    const value = getFieldValue(field.id);
+    const isInvalid = field.required && value === '';
+
+    if (field.type === 'text') {
+      return (
+        <Field
+          key={field.id}
+          label={field.label}
+          required={field.required}
+          invalid={isInvalid}
+          errorText={isInvalid ? 'Required field' : undefined}
+        >
+          <Input
+            id={field.id}
+            value={value}
+            onChange={(e) => handleFieldChange(field.id, e.target.value)}
+            placeholder={field.placeholder}
+            title={field.description}
+          />
+        </Field>
+      );
+    }
+
+    if (field.type === 'enum') {
+      const enumDef = configManager.getEnum(field.enumRef.enumId);
+      
+      if (!enumDef) {
+        return (
+          <Field key={field.id} label={field.label}>
+            <Text color="red.500" fontSize="sm">
+              Enum not found: {field.enumRef.enumId}
+            </Text>
+          </Field>
+        );
+      }
+
+      return (
+        <Field key={field.id} label={field.label}>
+          <NativeSelectRoot>
+            <NativeSelectField
+              id={field.id}
+              value={value}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => 
+                handleFieldChange(field.id, e.target.value)
+              }
+              title={field.description}
+            >
+              {enumDef.values.map((enumValue) => (
+                <option key={enumValue} value={enumValue}>
+                  {enumValue}
+                </option>
+              ))}
+            </NativeSelectField>
+          </NativeSelectRoot>
+        </Field>
+      );
+    }
+
+    return null;
+  };
+
+  // Show loading state
+  if (!config && !configError) {
+    return (
+      <Card.Root>
+        <Card.Body>
+          <Text>Loading character info configuration...</Text>
+        </Card.Body>
+      </Card.Root>
+    );
+  }
+
+  // Show error state
+  if (configError) {
+    return (
+      <Card.Root>
+        <Card.Body>
+          <Text color="red.500" fontWeight="semibold" mb={2}>
+            Configuration Error
+          </Text>
+          <Text color="red.400" fontSize="sm" whiteSpace="pre-wrap" fontFamily="mono">
+            {configError}
+          </Text>
+        </Card.Body>
+      </Card.Root>
+    );
+  }
+
+  // Config is loaded at this point
+  if (!config) return null;
 
   return (
     <Card.Root>
       <Card.Header>
         <Flex align="center" gap={2}>
-          <Text fontSize="lg" fontWeight="semibold">👤 Character Information</Text>
+          <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
         </Flex>
       </Card.Header>
       <Card.Body>
         <Grid gap={4} gridTemplateColumns={{ base: '1fr', xl: 'repeat(3, 1fr)' }}>
-          {/* Character Name */}
-          <Field
-            label="Name"
-            required
-            invalid={character.name === ''}
-            errorText={character.name === '' ? 'Required field' : undefined}
-          >
-            <Input
-              id="character-name"
-              value={character.name}
-              onChange={(e) => updateName(e.target.value)}
-              placeholder="Enter name"
-            />
-          </Field>
-
-          {/* Species Selection */}
-          <Field label="Species">
-            <NativeSelectRoot>
-              <NativeSelectField
-                id="species"
-                value={character.species}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => updateSpecies(e.target.value as Species)}
-              >
-                {Object.values(Species).map(species => (
-                  <option key={species} value={species}>{species}</option>
-                ))}
-              </NativeSelectField>
-            </NativeSelectRoot>
-          </Field>
-
-          {/* Experience/Background Selection */}
-          <Field label="Background">
-            <NativeSelectRoot>
-              <NativeSelectField
-                id="experience"
-                value={character.experience}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => updateExperience(e.target.value as Experience)}
-              >
-                {Object.values(Experience).map(exp => (
-                  <option key={exp} value={exp}>{exp}</option>
-                ))}
-              </NativeSelectField>
-            </NativeSelectRoot>
-          </Field>
+          {config.fields.map((field) => renderField(field))}
         </Grid>
       </Card.Body>
     </Card.Root>

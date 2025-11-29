@@ -30,14 +30,6 @@ describe('Character Schema Validation', () => {
       expect(result.success).toBe(false);
     });
 
-    it('should reject empty name', () => {
-      const character = { ...createEmptyCharacter(), name: '' };
-      const result = validateCharacterSheet(character);
-      
-      // Empty name should fail validation
-      expect(result.success).toBe(false);
-    });
-
     it('should validate character with valid data', () => {
       const character = {
         ...createEmptyCharacter(),

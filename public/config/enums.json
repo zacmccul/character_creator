@@ -1,0 +1,56 @@
+{
+  "enums": [
+    {
+      "id": "species",
+      "label": "Species",
+      "description": "Available character species/races",
+      "values": [
+        "Human",
+        "Elf",
+        "Dwarf",
+        "Halfling",
+        "Orc",
+        "Gnome",
+        "Tiefling",
+        "Dragonborn",
+        "Half-Elf"
+      ]
+    },
+    {
+      "id": "experience",
+      "label": "Experience/Background",
+      "description": "Character background experiences",
+      "values": [
+        "Soldier",
+        "Scholar",
+        "Criminal",
+        "Noble",
+        "Acolyte",
+        "Folk Hero",
+        "Merchant",
+        "Entertainer",
+        "Outlander",
+        "Sailor"
+      ]
+    },
+    {
+      "id": "classes",
+      "label": "Character Classes",
+      "description": "Available character classes",
+      "values": [
+        "Fighter",
+        "Wizard",
+        "Rogue",
+        "Cleric",
+        "Ranger",
+        "Barbarian",
+        "Bard",
+        "Druid",
+        "Monk",
+        "Paladin",
+        "Sorcerer",
+        "Warlock"
+      ]
+    }
+  ]
+}
