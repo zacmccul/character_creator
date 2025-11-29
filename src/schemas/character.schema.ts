@@ -55,6 +55,18 @@ export const AttributesSchema = z.object({
 export const CombatStatsSchema = z.record(z.string(), z.number());
 
 /**
+ * Character info schema - dynamic record of field IDs to strings
+ * Validates that all values are strings
+ */
+export const CharacterInfoSchema = z.record(z.string(), z.string());
+
+/**
+ * Inventory slots schema - dynamic record of tab IDs to string arrays
+ * Validates that all values are arrays of strings
+ */
+export const InventorySlotsSchema = z.record(z.string(), z.array(z.string()));
+
+/**
  * Resource counter schema (number or boolean)
  */
 export const ResourceCounterSchema = z.object({
@@ -79,19 +91,23 @@ export const ResourceCounterSchema = z.object({
  */
 export const CharacterSheetSchema = z.object({
   version: z.string().regex(/^\d+\.\d+\.\d+$/, 'Version must be in semantic versioning format (e.g., 1.0.0)'),
-  name: z.string(),
+  characterInfo: CharacterInfoSchema,
+  name: z.string().optional(), // DEPRECATED - kept for backward compatibility
   level: z.array(LevelEntrySchema),
-  species: SpeciesSchema,
-  experience: ExperienceSchema,
+  species: SpeciesSchema.optional(), // DEPRECATED - kept for backward compatibility
+  experience: ExperienceSchema.optional(), // DEPRECATED - kept for backward compatibility
   attributes: AttributesSchema,
   combatStats: CombatStatsSchema,
   movementRange: z.number().positive('Movement range must be positive').optional(), // DEPRECATED - kept for backward compatibility
-  equipmentSlots: z.array(EquipmentItemSchema),
-  consumableSlots: z.array(ConsumableItemSchema),
-  experienceBank: z.array(ExperienceBankItemSchema),
+  inventorySlots: InventorySlotsSchema,
+  equipmentSlots: z.array(EquipmentItemSchema).optional(), // DEPRECATED - kept for backward compatibility
+  consumableSlots: z.array(ConsumableItemSchema).optional(), // DEPRECATED - kept for backward compatibility
+  experienceBank: z.array(ExperienceBankItemSchema).optional(), // DEPRECATED - kept for backward compatibility
   resourceCounters: z.array(ResourceCounterSchema),
 }).refine(
   (data) => {
+    // DEPRECATED validation - skip if not present
+    if (!data.equipmentSlots) return true;
     // Validate that equipment slots length matches STR attribute
     const expectedEquipmentSlots = Math.max(0, data.attributes.STR);
     return data.equipmentSlots.length === expectedEquipmentSlots;
@@ -102,6 +118,8 @@ export const CharacterSheetSchema = z.object({
   }
 ).refine(
   (data) => {
+    // DEPRECATED validation - skip if not present
+    if (!data.consumableSlots) return true;
     // Validate that consumable slots length matches DEX attribute
     const expectedConsumableSlots = Math.max(0, data.attributes.DEX);
     return data.consumableSlots.length === expectedConsumableSlots;
@@ -112,6 +130,8 @@ export const CharacterSheetSchema = z.object({
   }
 ).refine(
   (data) => {
+    // DEPRECATED validation - skip if not present
+    if (!data.experienceBank) return true;
     // Validate that experience bank length matches INT attribute
     const expectedExperienceBank = Math.max(0, data.attributes.INT);
     return data.experienceBank.length === expectedExperienceBank;

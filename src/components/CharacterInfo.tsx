@@ -8,13 +8,12 @@ import { Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import { NativeSelectRoot, NativeSelectField } from '@/components/ui/native-select';
 import { useCharacterStore } from '@/stores/character.store';
-import { Species, Experience } from '@/types/character.types';
 import { ChangeEvent } from 'react';
 import type { CharacterInfoConfig, FieldConfig } from '@/types/character-info-config.types';
 import { configManager } from '@/utils/config-manager';
 
 export const CharacterInfo = () => {
-  const { character, updateName, updateSpecies, updateExperience } = useCharacterStore();
+  const { character, updateCharacterInfo } = useCharacterStore();
   const [config, setConfig] = useState<CharacterInfoConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
 
@@ -36,35 +35,12 @@ export const CharacterInfo = () => {
   }, []);
 
   const handleFieldChange = (fieldId: string, value: string) => {
-    // Map field IDs to store actions
-    // TODO: Make this more dynamic in the future
-    switch (fieldId) {
-      case 'name':
-        updateName(value);
-        break;
-      case 'character_species':
-        updateSpecies(value as Species);
-        break;
-      case 'character_experience':
-        updateExperience(value as Experience);
-        break;
-      default:
-        console.warn(`Unknown field ID: ${fieldId}`);
-    }
+    updateCharacterInfo(fieldId, value);
   };
 
   const getFieldValue = (fieldId: string): string => {
-    // Map field IDs to character values
-    switch (fieldId) {
-      case 'name':
-        return character.name;
-      case 'character_species':
-        return character.species;
-      case 'character_experience':
-        return character.experience;
-      default:
-        return '';
-    }
+    // Get value from character info record, defaulting to empty string
+    return character.characterInfo[fieldId] ?? '';
   };
 
   const renderField = (field: FieldConfig) => {

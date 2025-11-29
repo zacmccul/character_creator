@@ -3,10 +3,13 @@
  * Helpers for syncing character state with configuration changes
  */
 
-import type { CharacterSheet, Attributes, CombatStats } from '@/types/character.types';
+import type { CharacterSheet, Attributes, CombatStats, CharacterInfo, InventorySlots } from '@/types/character.types';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import type { CharacterInfoConfig } from '@/types/character-info-config.types';
+import type { InventoryConfig } from '@/types/inventory-config.types';
 import { AttributeType } from '@/types/character.types';
+import { evaluateFormula } from './formula-evaluator';
 
 /**
  * Sync combat stats with configuration
@@ -69,6 +72,37 @@ export const syncCharacterWithConfigs = (
 };
 
 /**
+ * Sync character info with configuration
+ * - Removes fields not in config
+ * - Adds missing fields with default values (empty string or first enum value)
+ * - Preserves existing field values that are still in config
+ */
+export const syncCharacterInfoWithConfig = (
+  currentInfo: CharacterInfo,
+  config: CharacterInfoConfig,
+  getEnumDefaultValue: (enumId: string) => string = () => ''
+): CharacterInfo => {
+  const syncedInfo: Record<string, string> = {};
+
+  // Iterate through config fields and populate synced object
+  for (const fieldConfig of config.fields) {
+    // Use existing value if present
+    if (currentInfo[fieldConfig.id]) {
+      syncedInfo[fieldConfig.id] = currentInfo[fieldConfig.id];
+    } else {
+      // For enum fields, get first value from enum; for text fields, use empty string
+      if (fieldConfig.type === 'enum') {
+        syncedInfo[fieldConfig.id] = getEnumDefaultValue(fieldConfig.enumRef.enumId);
+      } else {
+        syncedInfo[fieldConfig.id] = '';
+      }
+    }
+  }
+
+  return syncedInfo as CharacterInfo;
+};
+
+/**
  * Check if combat stats need syncing with config
  * Returns true if there are stats in character that aren't in config,
  * or if there are stats in config missing from character
@@ -121,3 +155,113 @@ export const needsAttributesSync = (
 
   return false;
 };
+
+/**
+ * Check if character info needs syncing with config
+ */
+export const needsCharacterInfoSync = (
+  currentInfo: CharacterInfo,
+  config: CharacterInfoConfig
+): boolean => {
+  const configFieldIds = new Set(config.fields.map(f => f.id));
+  const currentFieldIds = new Set(Object.keys(currentInfo));
+
+  // Check if current has fields not in config
+  for (const fieldId of currentFieldIds) {
+    if (!configFieldIds.has(fieldId)) {
+      return true;
+    }
+  }
+
+  // Check if config has fields not in current
+  for (const fieldId of configFieldIds) {
+    if (!currentFieldIds.has(fieldId)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/**
+ * Sync inventory slots with configuration
+ * - Calculates slot counts using formulas from config
+ * - Adjusts arrays to match new slot counts
+ * - Preserves existing item values where possible
+ * - Fills new slots with empty string (matching first enum value)
+ */
+export const syncInventorySlotsWithConfig = (
+  currentSlots: InventorySlots,
+  config: InventoryConfig,
+  attributes: Attributes,
+  getEnumDefaultValue: (enumId: string) => string = () => ''
+): InventorySlots => {
+  const syncedSlots: Record<string, readonly string[]> = {};
+
+  for (const tabConfig of config.tabs) {
+    // Calculate slot count using formula
+    const slotCount = evaluateFormula(tabConfig.slotFormula, attributes);
+    
+    // Get current slots for this tab, or empty array if doesn't exist
+    const currentTabSlots = currentSlots[tabConfig.id] || [];
+    
+    // Get default value for this tab's items
+    const defaultValue = getEnumDefaultValue(tabConfig.itemEnumId);
+    
+    // Adjust array to match new slot count
+    let newTabSlots: string[];
+    
+    if (currentTabSlots.length === slotCount) {
+      // No change needed
+      newTabSlots = [...currentTabSlots];
+    } else if (currentTabSlots.length < slotCount) {
+      // Need to add slots - fill with default value
+      const slotsToAdd = slotCount - currentTabSlots.length;
+      newTabSlots = [...currentTabSlots, ...Array(slotsToAdd).fill(defaultValue)];
+    } else {
+      // Need to remove slots - truncate array
+      newTabSlots = currentTabSlots.slice(0, slotCount);
+    }
+    
+    syncedSlots[tabConfig.id] = newTabSlots;
+  }
+
+  return syncedSlots as InventorySlots;
+};
+
+/**
+ * Check if inventory slots need syncing with config
+ * Returns true if tab structure has changed or if slot counts differ
+ */
+export const needsInventorySlotsSync = (
+  currentSlots: InventorySlots,
+  config: InventoryConfig,
+  attributes: Attributes
+): boolean => {
+  const configTabIds = new Set(config.tabs.map(t => t.id));
+  const currentTabIds = new Set(Object.keys(currentSlots));
+
+  // Check if tab IDs match
+  if (configTabIds.size !== currentTabIds.size) {
+    return true;
+  }
+
+  for (const tabId of configTabIds) {
+    if (!currentTabIds.has(tabId)) {
+      return true;
+    }
+  }
+
+  // Check if slot counts match for each tab
+  for (const tabConfig of config.tabs) {
+    const expectedCount = evaluateFormula(tabConfig.slotFormula, attributes);
+    const currentCount = (currentSlots[tabConfig.id] || []).length;
+    
+    if (expectedCount !== currentCount) {
+      return true;
+    }
+  }
+
+  return false;
+};
+

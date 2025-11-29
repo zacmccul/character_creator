@@ -28,7 +28,9 @@ import { validateCharacterSheet } from '@/schemas/character.schema';
 import { nanoid } from 'nanoid';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
-import { syncAttributesWithConfig, syncCombatStatsWithConfig } from '@/utils/config-sync';
+import type { InventoryConfig } from '@/types/inventory-config.types';
+import { syncAttributesWithConfig, syncCombatStatsWithConfig, syncInventorySlotsWithConfig } from '@/utils/config-sync';
+import { getEnumById } from '@/utils/config-manager';
 
 // ============================================================================
 // Store Interface
@@ -38,7 +40,13 @@ interface CharacterState {
   // Character data
   character: CharacterSheet;
   
-  // Actions - Basic field updates
+  // Internal config references for dynamic recalculation
+  _inventoryConfig: InventoryConfig | null;
+  
+  // Actions - Character info (dynamic)
+  updateCharacterInfo: (fieldId: string, value: string) => void;
+  
+  // DEPRECATED: Individual field updaters (kept for backward compatibility)
   updateName: (name: string) => void;
   updateSpecies: (species: Species) => void;
   updateExperience: (experience: Experience) => void;
@@ -64,13 +72,16 @@ interface CharacterState {
   updateLevelClass: (index: number, characterClass: CharacterClass) => void;
   removeLevel: (index: number) => void;
   
-  // Actions - Equipment slots
+  // Actions - Inventory slots (dynamic)
+  updateInventorySlot: (tabId: string, index: number, value: string) => void;
+  
+  // DEPRECATED: Equipment slots (use updateInventorySlot with tabId='equipment' instead)
   updateEquipmentSlot: (index: number, item: EquipmentItem) => void;
   
-  // Actions - Consumable slots
+  // DEPRECATED: Consumable slots (use updateInventorySlot with tabId='consumables' instead)
   updateConsumableSlot: (index: number, item: ConsumableItem) => void;
   
-  // Actions - Experience bank
+  // DEPRECATED: Experience bank (use updateInventorySlot with tabId='experience' instead)
   updateExperienceBankSlot: (index: number, item: ExperienceBankItem) => void;
   
   // Actions - Resource counters
@@ -83,6 +94,7 @@ interface CharacterState {
   loadCharacter: (data: CharacterSheet) => void;
   resetCharacter: () => void;
   syncWithConfigs: (attributesConfig: AttributesConfig, combatStatsConfig: CombatStatsConfig) => void;
+  syncWithAllConfigs: (attributesConfig: AttributesConfig, combatStatsConfig: CombatStatsConfig, inventoryConfig: InventoryConfig) => void;
   
   // Utility
   validateCurrentCharacter: () => boolean;
@@ -95,21 +107,38 @@ interface CharacterState {
 export const useCharacterStore = create<CharacterState>((set, get) => ({
   // Initial state
   character: createEmptyCharacter(),
+  _inventoryConfig: null,
   
-  // Basic field updates
+  // Character info updater (dynamic)
+  updateCharacterInfo: (fieldId, value) => {
+    set((state) => ({
+      character: {
+        ...state.character,
+        characterInfo: {
+          ...state.character.characterInfo,
+          [fieldId]: value,
+        },
+      },
+    }));
+  },
+  
+  // DEPRECATED: Individual field updaters (use updateCharacterInfo instead)
   updateName: (name) => {
+    get().updateCharacterInfo('name', name);
     set((state) => ({
       character: { ...state.character, name },
     }));
   },
   
   updateSpecies: (species) => {
+    get().updateCharacterInfo('character_species', species);
     set((state) => ({
       character: { ...state.character, species },
     }));
   },
   
   updateExperience: (experience) => {
+    get().updateCharacterInfo('character_experience', experience);
     set((state) => ({
       character: { ...state.character, experience },
     }));
@@ -175,18 +204,19 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         [attribute]: clampedValue,
       };
       
-      // Recalculate slot counts
+      // Recalculate slot counts for backward compatibility (deprecated fields)
       const equipmentSlotsCount = calculateEquipmentSlots(newAttributes.STR);
       const consumableSlotsCount = calculateConsumableSlots(newAttributes.DEX);
       const experienceBankCount = calculateExperienceBankSlots(newAttributes.INT);
       
-      // Adjust arrays to match new counts
-      const adjustArray = <T>(arr: readonly T[], newLength: number, defaultValue: T): T[] => {
-        if (arr.length === newLength) return [...arr];
-        if (arr.length < newLength) {
-          return [...arr, ...Array(newLength - arr.length).fill(defaultValue)];
+      // Adjust deprecated arrays to match new counts
+      const adjustArray = <T>(arr: readonly T[] | undefined, newLength: number, defaultValue: T): T[] => {
+        const safeArr = arr || [];
+        if (safeArr.length === newLength) return [...safeArr];
+        if (safeArr.length < newLength) {
+          return [...safeArr, ...Array(newLength - safeArr.length).fill(defaultValue)];
         }
-        return arr.slice(0, newLength) as T[];
+        return safeArr.slice(0, newLength) as T[];
       };
       
       const equipmentSlots = adjustArray(
@@ -205,6 +235,22 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         ExperienceBankItem.NONE
       );
       
+      // Recalculate dynamic inventory slots if config is available
+      let newInventorySlots = state.character.inventorySlots;
+      if (state._inventoryConfig) {
+        const getEnumDefaultValue = (enumId: string): string => {
+          const enumDef = getEnumById(enumId);
+          return enumDef?.values[0] || '';
+        };
+        
+        newInventorySlots = syncInventorySlotsWithConfig(
+          state.character.inventorySlots,
+          state._inventoryConfig,
+          newAttributes,
+          getEnumDefaultValue
+        );
+      }
+      
       return {
         character: {
           ...state.character,
@@ -212,7 +258,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
           equipmentSlots,
           consumableSlots,
           experienceBank,
+          inventorySlots: newInventorySlots,
         },
+        _inventoryConfig: state._inventoryConfig,
       };
     });
   },
@@ -265,10 +313,35 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     });
   },
   
-  // Equipment slots
-  updateEquipmentSlot: (index, item) => {
+  // Inventory slots (dynamic)
+  updateInventorySlot: (tabId, index, value) => {
     set((state) => {
-      const newSlots = [...state.character.equipmentSlots];
+      const currentTabSlots = state.character.inventorySlots[tabId] || [];
+      const newTabSlots = [...currentTabSlots];
+      
+      if (index >= 0 && index < newTabSlots.length) {
+        newTabSlots[index] = value;
+      }
+      
+      return {
+        character: {
+          ...state.character,
+          inventorySlots: {
+            ...state.character.inventorySlots,
+            [tabId]: newTabSlots,
+          },
+        },
+      };
+    });
+  },
+  
+  // DEPRECATED: Equipment slots (use updateInventorySlot instead)
+  updateEquipmentSlot: (index, item) => {
+    // Update both new and deprecated fields for backward compatibility
+    get().updateInventorySlot('equipment', index, item);
+    
+    set((state) => {
+      const newSlots = [...(state.character.equipmentSlots || [])];
       if (index >= 0 && index < newSlots.length) {
         newSlots[index] = item;
       }
@@ -279,10 +352,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     });
   },
   
-  // Consumable slots
+  // DEPRECATED: Consumable slots (use updateInventorySlot instead)
   updateConsumableSlot: (index, item) => {
+    // Update both new and deprecated fields for backward compatibility
+    get().updateInventorySlot('consumables', index, item);
+    
     set((state) => {
-      const newSlots = [...state.character.consumableSlots];
+      const newSlots = [...(state.character.consumableSlots || [])];
       if (index >= 0 && index < newSlots.length) {
         newSlots[index] = item;
       }
@@ -293,10 +369,13 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     });
   },
   
-  // Experience bank
+  // DEPRECATED: Experience bank (use updateInventorySlot instead)
   updateExperienceBankSlot: (index, item) => {
+    // Update both new and deprecated fields for backward compatibility
+    get().updateInventorySlot('experience_bank', index, item);
+    
     set((state) => {
-      const newSlots = [...state.character.experienceBank];
+      const newSlots = [...(state.character.experienceBank || [])];
       if (index >= 0 && index < newSlots.length) {
         newSlots[index] = item;
       }
@@ -390,6 +469,31 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         combatStats: syncCombatStatsWithConfig(state.character.combatStats, combatStatsConfig),
       },
     }));
+  },
+  
+  syncWithAllConfigs: (attributesConfig, combatStatsConfig, inventoryConfig) => {
+    set((state) => {
+      // Helper to get first enum value
+      const getEnumDefaultValue = (enumId: string): string => {
+        const enumDef = getEnumById(enumId);
+        return enumDef?.values[0] || '';
+      };
+      
+      return {
+        character: {
+          ...state.character,
+          attributes: syncAttributesWithConfig(state.character.attributes, attributesConfig),
+          combatStats: syncCombatStatsWithConfig(state.character.combatStats, combatStatsConfig),
+          inventorySlots: syncInventorySlotsWithConfig(
+            state.character.inventorySlots,
+            inventoryConfig,
+            state.character.attributes,
+            getEnumDefaultValue
+          ),
+        },
+        _inventoryConfig: inventoryConfig,
+      };
+    });
   },
   
   validateCurrentCharacter: () => {

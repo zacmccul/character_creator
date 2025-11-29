@@ -156,6 +156,22 @@ export interface CombatStats {
 }
 
 /**
+ * Character information fields - dynamic record loaded from configuration
+ * Keys are field IDs from character-info.json, values are strings
+ */
+export interface CharacterInfo {
+  readonly [fieldId: string]: string;
+}
+
+/**
+ * Inventory slots - dynamic record loaded from configuration
+ * Keys are tab IDs from inventory.json, values are arrays of item names
+ */
+export interface InventorySlots {
+  readonly [tabId: string]: readonly string[];
+}
+
+/**
  * Custom resource counter (can be number or boolean)
  */
 export interface ResourceCounter {
@@ -170,16 +186,18 @@ export interface ResourceCounter {
  */
 export interface CharacterSheet {
   readonly version: string; // Schema version (e.g., "1.0.0")
-  readonly name: string;
+  readonly characterInfo: CharacterInfo; // Dynamic fields loaded from config
+  readonly name?: string; // DEPRECATED: Use characterInfo.name instead
   readonly level: readonly LevelEntry[];
-  readonly species: Species;
-  readonly experience: Experience;
+  readonly species?: Species; // DEPRECATED: Use characterInfo.character_species instead
+  readonly experience?: Experience; // DEPRECATED: Use characterInfo.character_experience instead
   readonly attributes: Attributes;
   readonly combatStats: CombatStats; // Dynamic stats loaded from config
   readonly movementRange?: number; // DEPRECATED: Use combatStats.movementRange instead
-  readonly equipmentSlots: readonly EquipmentItem[]; // Length based on STR
-  readonly consumableSlots: readonly ConsumableItem[]; // Length based on DEX
-  readonly experienceBank: readonly ExperienceBankItem[]; // Length based on INT
+  readonly inventorySlots: InventorySlots; // Dynamic inventory tabs loaded from config
+  readonly equipmentSlots?: readonly EquipmentItem[]; // DEPRECATED: Use inventorySlots.equipment instead
+  readonly consumableSlots?: readonly ConsumableItem[]; // DEPRECATED: Use inventorySlots.consumables instead
+  readonly experienceBank?: readonly ExperienceBankItem[]; // DEPRECATED: Use inventorySlots.experience instead
   readonly resourceCounters: readonly ResourceCounter[];
 }
 
@@ -192,10 +210,16 @@ export interface CharacterSheet {
  */
 export const createEmptyCharacter = (): CharacterSheet => ({
   version: '1.0.0',
-  name: '',
+  characterInfo: {
+    // Default fields - will be populated from config on first load
+    name: '',
+    character_species: Species.HUMAN,
+    character_experience: Experience.FOLK_HERO,
+  },
+  name: '', // DEPRECATED
   level: [],
-  species: Species.HUMAN,
-  experience: Experience.FOLK_HERO,
+  species: Species.HUMAN, // DEPRECATED
+  experience: Experience.FOLK_HERO, // DEPRECATED
   attributes: {
     [AttributeType.STR]: 0,
     [AttributeType.DEX]: 0,
@@ -214,9 +238,15 @@ export const createEmptyCharacter = (): CharacterSheet => ({
     range: 5,
   },
   movementRange: 30, // DEPRECATED - kept for backward compatibility
-  equipmentSlots: [],
-  consumableSlots: [],
-  experienceBank: [],
+  inventorySlots: {
+    // Default inventory - will be populated from config on first load
+    equipment: [],
+    consumables: [],
+    experience_bank: [],
+  },
+  equipmentSlots: [], // DEPRECATED
+  consumableSlots: [], // DEPRECATED
+  experienceBank: [], // DEPRECATED
   resourceCounters: [],
 });
 

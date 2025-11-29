@@ -7,10 +7,12 @@ import { AttributesConfigSchema } from '@/schemas/attribute-config.schema';
 import { EnumsConfigSchema } from '@/schemas/enums-config.schema';
 import { CharacterInfoConfigSchema } from '@/schemas/character-info-config.schema';
 import { CombatStatsConfigSchema } from '@/schemas/combat-stats-config.schema';
+import { InventoryConfigSchema } from '@/schemas/inventory-config.schema';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { EnumsConfig, EnumDefinition } from '@/types/enums-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import type { InventoryConfig } from '@/types/inventory-config.types';
 import { ZodError } from 'zod';
 
 /**
@@ -30,6 +32,7 @@ export interface AppConfig {
   readonly enums: EnumsConfig;
   readonly characterInfo: CharacterInfoConfig;
   readonly combatStats: CombatStatsConfig;
+  readonly inventory: InventoryConfig;
 }
 
 /**
@@ -74,6 +77,7 @@ class ConfigManager {
     let enums: EnumsConfig | null = null;
     let characterInfo: CharacterInfoConfig | null = null;
     let combatStats: CombatStatsConfig | null = null;
+    let inventory: InventoryConfig | null = null;
 
     // Load attributes configuration
     try {
@@ -119,26 +123,43 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'combatStats'));
     }
 
+    // Load inventory configuration
+    try {
+      inventory = await this.loadConfig<InventoryConfig>(
+        '/config/inventory.json',
+        InventoryConfigSchema,
+        'inventory'
+      );
+    } catch (error) {
+      errors.push(...this.extractErrors(error, 'inventory'));
+    }
+
     // Validate cross-references between configs
     if (characterInfo && enums) {
       const enumRefErrors = this.validateEnumReferences(characterInfo, enums);
       errors.push(...enumRefErrors);
     }
 
+    // Validate inventory enum references
+    if (inventory && enums) {
+      const inventoryEnumErrors = this.validateInventoryEnumReferences(inventory, enums);
+      errors.push(...inventoryEnumErrors);
+    }
+
     // Validate global ID uniqueness across all configs
-    if (attributes && enums && characterInfo && combatStats) {
-      const uniquenessErrors = this.validateGlobalIdUniqueness(attributes, enums, characterInfo, combatStats);
+    if (attributes && enums && characterInfo && combatStats && inventory) {
+      const uniquenessErrors = this.validateGlobalIdUniqueness(attributes, enums, characterInfo, combatStats, inventory);
       errors.push(...uniquenessErrors);
     }
 
     // If any errors occurred, return them
-    if (errors.length > 0 || !attributes || !enums || !characterInfo || !combatStats) {
+    if (errors.length > 0 || !attributes || !enums || !characterInfo || !combatStats || !inventory) {
       this.errors = errors;
       return { success: false, errors };
     }
 
     // Cache successful config
-    this.config = { attributes, enums, characterInfo, combatStats };
+    this.config = { attributes, enums, characterInfo, combatStats, inventory };
     return { success: true, config: this.config };
   }
 
@@ -226,14 +247,38 @@ class ConfigManager {
   }
 
   /**
+   * Validate that inventory tabs reference valid enums
+   */
+  private validateInventoryEnumReferences(
+    inventory: InventoryConfig,
+    enums: EnumsConfig
+  ): ConfigValidationError[] {
+    const errors: ConfigValidationError[] = [];
+    const enumIds = new Set(enums.enums.map((e) => e.id));
+
+    inventory.tabs.forEach((tab, index) => {
+      if (!enumIds.has(tab.itemEnumId)) {
+        errors.push({
+          configName: 'inventory',
+          path: `tabs.${index}.itemEnumId`,
+          message: `Referenced enum '${tab.itemEnumId}' not found in enums configuration`,
+        });
+      }
+    });
+
+    return errors;
+  }
+
+  /**
    * Validate that all IDs are globally unique across all configurations
-   * Enums, attributes, character info fields, and combat stats must all have unique IDs
+   * Enums, attributes, character info fields, combat stats, and inventory tabs must all have unique IDs
    */
   private validateGlobalIdUniqueness(
     attributes: AttributesConfig,
     enums: EnumsConfig,
     characterInfo: CharacterInfoConfig,
-    combatStats: CombatStatsConfig
+    combatStats: CombatStatsConfig,
+    inventory: InventoryConfig
   ): ConfigValidationError[] {
     const errors: ConfigValidationError[] = [];
     const idMap = new Map<string, { configName: string; path: string }>();
@@ -291,6 +336,20 @@ class ConfigManager {
         });
       } else {
         idMap.set(stat.id, { configName: 'combatStats', path: `stats.${index}.id` });
+      }
+    });
+
+    // Collect all inventory tab IDs
+    inventory.tabs.forEach((tab, index) => {
+      const existing = idMap.get(tab.id);
+      if (existing) {
+        errors.push({
+          configName: 'inventory',
+          path: `tabs.${index}.id`,
+          message: `ID '${tab.id}' is already used in ${existing.configName} at ${existing.path}`,
+        });
+      } else {
+        idMap.set(tab.id, { configName: 'inventory', path: `tabs.${index}.id` });
       }
     });
 

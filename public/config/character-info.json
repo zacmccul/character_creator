@@ -26,6 +26,13 @@
         "enumId": "experience"
       },
       "description": "Your character's background experience"
+    },
+    {
+      "id": "player_name",
+      "type": "text",
+      "label": "Player Name",
+      "placeholder": "Enter your name",
+      "description": "The name of the player controlling this character"
     }
   ]
 }
