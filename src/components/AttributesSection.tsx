@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Box, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { Field } from '@/components/ui/field';
-import { useCharacterStore, useDerivedStats } from '@/stores/character.store';
+import { useCharacterStore } from '@/stores/character.store';
 import { AttributeType } from '@/types/character.types';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
@@ -15,7 +15,6 @@ import { configManager } from '@/utils/config-manager';
 
 export const AttributesSection = () => {
   const { character, updateAttribute, syncWithConfigs } = useCharacterStore();
-  const { equipmentSlotsCount, consumableSlotsCount, experienceBankCount } = useDerivedStats();
   const [config, setConfig] = useState<AttributesConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
 
@@ -126,68 +125,6 @@ export const AttributesSection = () => {
               );
             })}
           </Grid>
-
-          {/* Derived Stats Display */}
-          <Box pt={4} borderTopWidth="1px">
-            <Flex align="center" gap={2} mb={4}>
-              <Text fontSize="sm" fontWeight="medium" color="gray.600">🎒 Derived Capacities</Text>
-            </Flex>
-            <Grid gridTemplateColumns="repeat(3, 1fr)" gap={4}>
-              <Tooltip content={<Text fontSize="sm">Equipment slots based on STR attribute</Text>}>
-                <Flex
-                  direction="column"
-                  gap={2}
-                  borderRadius="lg"
-                  borderWidth="1px"
-                  bg="red.50"
-                  p={4}
-                  textAlign="center"
-                  _hover={{ shadow: "md" }}
-                  transition="all 0.2s"
-                >
-                  <Text fontSize="xs" fontWeight="medium" color="gray.600" textTransform="uppercase">Equipment</Text>
-                  <Text fontSize="3xl" fontWeight="bold" color="red.600">{equipmentSlotsCount}</Text>
-                  <Text fontSize="xs" color="gray.500" fontFamily="mono">from STR</Text>
-                </Flex>
-              </Tooltip>
-
-              <Tooltip content={<Text fontSize="sm">Consumable slots based on DEX attribute</Text>}>
-                <Flex
-                  direction="column"
-                  gap={2}
-                  borderRadius="lg"
-                  borderWidth="1px"
-                  bg="green.50"
-                  p={4}
-                  textAlign="center"
-                  _hover={{ shadow: "md" }}
-                  transition="all 0.2s"
-                >
-                  <Text fontSize="xs" fontWeight="medium" color="gray.600" textTransform="uppercase">Consumables</Text>
-                  <Text fontSize="3xl" fontWeight="bold" color="green.600">{consumableSlotsCount}</Text>
-                  <Text fontSize="xs" color="gray.500" fontFamily="mono">from DEX</Text>
-                </Flex>
-              </Tooltip>
-
-              <Tooltip content={<Text fontSize="sm">Experience bank slots based on INT attribute</Text>}>
-                <Flex
-                  direction="column"
-                  gap={2}
-                  borderRadius="lg"
-                  borderWidth="1px"
-                  bg="blue.50"
-                  p={4}
-                  textAlign="center"
-                  _hover={{ shadow: "md" }}
-                  transition="all 0.2s"
-                >
-                  <Text fontSize="xs" fontWeight="medium" color="gray.600" textTransform="uppercase">Experience</Text>
-                  <Text fontSize="3xl" fontWeight="bold" color="blue.600">{experienceBankCount}</Text>
-                  <Text fontSize="xs" color="gray.500" fontFamily="mono">from INT</Text>
-                </Flex>
-              </Tooltip>
-            </Grid>
-          </Box>
         </Flex>
       </Card.Body>
     </Card.Root>
