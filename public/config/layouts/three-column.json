@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Three-Column Wide Screen Layout",
+  "description": "Optimized for wide screens with three columns of information",
+  "grid": {
+    "columns": {
+      "base": 1,
+      "md": 2,
+      "xl": 3
+    },
+    "gap": 6
+  },
+  "items": [
+    {
+      "componentId": "character-info",
+      "colSpan": {
+        "base": 1,
+        "md": 2,
+        "xl": 3
+      }
+    },
+    {
+      "componentId": "attributes",
+      "colSpan": 1
+    },
+    {
+      "componentId": "combat-stats",
+      "colSpan": 1
+    },
+    {
+      "componentId": "level-class",
+      "colSpan": 1
+    },
+    {
+      "componentId": "resource-counters",
+      "colSpan": {
+        "base": 1,
+        "md": 1,
+        "xl": 1
+      }
+    },
+    {
+      "componentId": "inventory",
+      "colSpan": {
+        "base": 1,
+        "md": 1,
+        "xl": 2
+      }
+    }
+  ],
+  "container": {
+    "maxW": "container.2xl",
+    "px": 4,
+    "py": {
+      "base": 6,
+      "sm": 8
+    }
+  }
+}

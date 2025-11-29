@@ -1,0 +1,84 @@
+{
+  "version": "1.0.0",
+  "name": "Combat-Focused Layout",
+  "description": "Emphasizes combat stats and attributes for quick reference during gameplay",
+  "grid": {
+    "templateColumns": {
+      "base": "1fr",
+      "md": "350px 1fr",
+      "lg": "300px 400px 1fr"
+    },
+    "gap": 6,
+    "templateRows": "auto 1fr"
+  },
+  "items": [
+    {
+      "componentId": "character-info",
+      "colSpan": {
+        "base": 1,
+        "md": 2,
+        "lg": 3
+      }
+    },
+    {
+      "componentId": "combat-stats",
+      "colStart": {
+        "base": 1,
+        "md": 1,
+        "lg": 1
+      },
+      "rowStart": 2
+    },
+    {
+      "componentId": "attributes",
+      "colStart": {
+        "base": 1,
+        "md": 2,
+        "lg": 2
+      },
+      "rowStart": 2
+    },
+    {
+      "componentId": "level-class",
+      "colStart": {
+        "base": 1,
+        "md": 1,
+        "lg": 3
+      },
+      "rowStart": {
+        "base": 3,
+        "md": 3,
+        "lg": 2
+      }
+    },
+    {
+      "componentId": "resource-counters",
+      "colStart": {
+        "base": 1,
+        "md": 2,
+        "lg": 3
+      },
+      "rowStart": {
+        "base": 4,
+        "md": 4,
+        "lg": 3
+      }
+    },
+    {
+      "componentId": "inventory",
+      "colSpan": {
+        "base": 1,
+        "md": 2,
+        "lg": 3
+      }
+    }
+  ],
+  "container": {
+    "maxW": "container.xl",
+    "px": 4,
+    "py": {
+      "base": 6,
+      "md": 8
+    }
+  }
+}

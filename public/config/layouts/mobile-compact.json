@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "name": "Compact Mobile-First Layout",
+  "description": "Single column layout optimized for mobile devices with compact spacing",
+  "grid": {
+    "columns": 1,
+    "gap": 4
+  },
+  "items": [
+    {
+      "componentId": "character-info"
+    },
+    {
+      "componentId": "attributes"
+    },
+    {
+      "componentId": "combat-stats"
+    },
+    {
+      "componentId": "level-class"
+    },
+    {
+      "componentId": "resource-counters"
+    },
+    {
+      "componentId": "inventory"
+    }
+  ],
+  "container": {
+    "maxW": "container.sm",
+    "px": 3,
+    "py": 4
+  }
+}

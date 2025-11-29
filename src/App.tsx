@@ -3,8 +3,8 @@
  * Full character sheet interface with all sections
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { Box, Button, Flex, Heading, Spinner, Text, Container, Grid, GridItem } from '@chakra-ui/react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Box, Button, Flex, Heading, Spinner, Text, Container } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { useCharacterStore } from '@/stores/character.store';
 import { useVersionHistoryStore } from '@/stores/version-history.store';
@@ -20,13 +20,8 @@ import {
 import { createEmptyCharacter } from '@/types/character.types';
 import { createEmptyVersionHistory } from '@/types/version-history.types';
 import { Upload, FileJson, Save } from 'lucide-react';
-import { CharacterInfo } from '@/components/CharacterInfo';
-import { AttributesSection } from '@/components/AttributesSection';
-import { CombatStatsSection } from '@/components/CombatStatsSection';
-import { LevelClassSection } from '@/components/LevelClassSection';
-import { ResourceCounters } from '@/components/ResourceCounters';
-import { InventorySection } from '@/components/InventorySection';
 import { VersionHistoryModal } from '@/components/VersionHistoryModal';
+import { ConfigurableLayout } from '@/components/ConfigurableLayout';
 
 function App() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -37,6 +32,11 @@ function App() {
   
   // Use ref to track if we should save (prevents infinite loops)
   const saveTimeoutRef = useRef<number | null>(null);
+
+  // Memoized error handler to prevent recreating on every render
+  const handleLayoutError = useCallback((error: string) => {
+    console.error('Layout error:', error);
+  }, []);
 
   // Initialize data on mount (only once)
   useEffect(() => {
@@ -206,35 +206,7 @@ function App() {
 
       {/* Main Content */}
       <Container maxW="container.xl" px={4} py={{ base: 6, sm: 8 }}>
-        <Grid
-          gap={6}
-          templateColumns={{ base: '1fr', lg: '400px 1fr', xl: '450px 1fr' }}
-        >
-          {/* Left Column - Attributes */}
-          <GridItem>
-            <AttributesSection />
-          </GridItem>
-
-          {/* Right Column - Everything Else */}
-          <GridItem>
-            <Flex direction="column" gap={6}>
-              {/* Character Info */}
-              <CharacterInfo />
-
-              {/* Combat Stats */}
-              <CombatStatsSection />
-
-              {/* Level & Class */}
-              <LevelClassSection />
-
-              {/* Resource Counters & Inventory */}
-              <Grid gap={6} templateColumns={{ base: '1fr', xl: 'repeat(2, 1fr)' }}>
-                <ResourceCounters />
-                <InventorySection />
-              </Grid>
-            </Flex>
-          </GridItem>
-        </Grid>
+        <ConfigurableLayout onError={handleLayoutError} />
       </Container>
 
       {/* Footer */}
