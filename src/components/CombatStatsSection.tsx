@@ -1,180 +1,127 @@
 /**
  * Combat Stats Section Component
- * HP, MP, Movement, and combat-related statistics
+ * Configuration-driven combat statistics display
  */
 
+import { useEffect, useState } from 'react';
 import { Button, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { useCharacterStore } from '@/stores/character.store';
+import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
+import { configManager } from '@/utils/config-manager';
 
 export const CombatStatsSection = () => {
-  const {
-    character,
-    updateHP,
-    updateMP,
-    updateMovementRange,
-    updateAbilityBonus,
-    updateAttackPower,
-    updateSpellPower,
-    updateRange,
-  } = useCharacterStore();
+  const { character, updateCombatStat, syncWithConfigs } = useCharacterStore();
+  const [config, setConfig] = useState<CombatStatsConfig | null>(null);
+  const [configError, setConfigError] = useState<string | null>(null);
 
-  const handleNumberInput = (
-    value: string,
-    updater: (val: number) => void,
-    min?: number
-  ) => {
-    const numValue = parseFloat(value);
-    if (!isNaN(numValue) && (min === undefined || numValue >= min)) {
-      updater(numValue);
+  // Load configuration on mount
+  useEffect(() => {
+    configManager.loadAllConfigs()
+      .then((result) => {
+        if (result.success) {
+          setConfig(result.config.combatStats);
+          // Sync character state with loaded configs
+          syncWithConfigs(result.config.attributes, result.config.combatStats);
+        } else {
+          const errorMsg = configManager.formatErrors(result.errors);
+          setConfigError(errorMsg);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load combat stats configuration:', error);
+        setConfigError(error.message);
+      });
+  }, [syncWithConfigs]);
+
+  const handleStatChange = (statId: string, value: string) => {
+    if (!config) return;
+
+    const statConfig = config.stats.find(s => s.id === statId);
+    if (!statConfig) return;
+
+    const numValue = statConfig.schema.type === 'integer' 
+      ? parseInt(value, 10) 
+      : parseFloat(value);
+    
+    if (isNaN(numValue)) return;
+
+    // Validate against schema constraints
+    if (validateAttributeValue(statConfig, numValue)) {
+      updateCombatStat(statId, numValue);
     }
   };
+
+  // Show loading state
+  if (!config && !configError) {
+    return (
+      <Card.Root>
+        <Card.Body>
+          <Text>Loading combat stats configuration...</Text>
+        </Card.Body>
+      </Card.Root>
+    );
+  }
+
+  // Show error state
+  if (configError) {
+    return (
+      <Card.Root>
+        <Card.Body>
+          <Text color="red.500" fontWeight="semibold" mb={2}>
+            Configuration Error
+          </Text>
+          <Text color="red.400" fontSize="sm" whiteSpace="pre-wrap" fontFamily="mono">
+            {configError}
+          </Text>
+        </Card.Body>
+      </Card.Root>
+    );
+  }
+
+  // Config is loaded at this point
+  if (!config) return null;
 
   return (
     <Card.Root>
       <Card.Header>
         <Flex align="center" gap={2}>
-          <Text fontSize="lg" fontWeight="semibold">⚔️ Combat Stats</Text>
+          <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
         </Flex>
       </Card.Header>
       <Card.Body>
         <Grid gridTemplateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} gap={4}>
-          {/* HP */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Hit Points - Character's health</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                ❤️ HP
-              </Button>
-            </Tooltip>
-            <Input
-              id="hp"
-              type="number"
-              value={character.hp}
-              onChange={(e) => handleNumberInput(e.target.value, updateHP)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
+          {config.stats.map((statConfig) => {
+            // Get value from combat stats record, defaulting to 0 if not present
+            const value = character.combatStats[statConfig.id] ?? 0;
+            const bounds = getAttributeBounds(statConfig);
+            const inputType = statConfig.schema.type === 'integer' ? 'number' : 'number';
+            const step = statConfig.schema.type === 'integer' ? 1 : 0.1;
 
-          {/* MP */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Mana Points - Resource for spells and abilities</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                ✨ MP
-              </Button>
-            </Tooltip>
-            <Input
-              id="mp"
-              type="number"
-              min={0}
-              value={character.mp}
-              onChange={(e) => handleNumberInput(e.target.value, updateMP, 0)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
-
-          {/* Movement Range */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Movement range per turn</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                🏃 Move
-              </Button>
-            </Tooltip>
-            <Input
-              id="movement"
-              type="number"
-              min={0.1}
-              step={0.5}
-              value={character.movementRange}
-              onChange={(e) => handleNumberInput(e.target.value, updateMovementRange, 0.1)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
-
-          {/* Ability Bonus */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Bonus to ability checks and saves</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                🎯 Ability
-              </Button>
-            </Tooltip>
-            <Input
-              id="ability-bonus"
-              type="number"
-              value={character.abilityBonus}
-              onChange={(e) => handleNumberInput(e.target.value, updateAbilityBonus)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
-
-          {/* Attack Power */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Physical attack damage bonus</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                ⚡ Attack
-              </Button>
-            </Tooltip>
-            <Input
-              id="attack-power"
-              type="number"
-              value={character.attackPower}
-              onChange={(e) => handleNumberInput(e.target.value, updateAttackPower)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
-
-          {/* Spell Power */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Spell damage and healing bonus</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                🔮 Spell
-              </Button>
-            </Tooltip>
-            <Input
-              id="spell-power"
-              type="number"
-              value={character.spellPower}
-              onChange={(e) => handleNumberInput(e.target.value, updateSpellPower)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
-
-          {/* Range */}
-          <Flex direction="column" gap={2}>
-            <Tooltip content={<Text fontSize="sm">Attack and spell range distance</Text>}>
-              <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
-                🎯 Range
-              </Button>
-            </Tooltip>
-            <Input
-              id="range"
-              type="number"
-              min={1}
-              value={character.range}
-              onChange={(e) => handleNumberInput(e.target.value, updateRange, 1)}
-              h={12}
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="semibold"
-            />
-          </Flex>
+            return (
+              <Flex key={statConfig.id} direction="column" gap={2}>
+                <Tooltip content={<Text fontSize="sm">{statConfig.description}</Text>}>
+                  <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
+                    {statConfig.emoji} {statConfig.label}
+                  </Button>
+                </Tooltip>
+                <Input
+                  id={statConfig.id}
+                  type={inputType}
+                  min={bounds.min}
+                  max={bounds.max !== Number.MAX_SAFE_INTEGER ? bounds.max : undefined}
+                  step={step}
+                  value={value}
+                  onChange={(e) => handleStatChange(statConfig.id, e.target.value)}
+                  h={12}
+                  textAlign="center"
+                  fontSize="xl"
+                  fontWeight="semibold"
+                />
+              </Flex>
+            );
+          })}
         </Grid>
       </Card.Body>
     </Card.Root>

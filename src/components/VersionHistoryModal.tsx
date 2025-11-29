@@ -160,11 +160,11 @@ export const VersionHistoryModal = () => {
                   </Box>
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold" mb={1}>HP</Text>
-                    <Text fontSize="sm">{previewData.characterData.hp}</Text>
+                    <Text fontSize="sm">{previewData.characterData.combatStats?.hp ?? 'N/A'}</Text>
                   </Box>
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold" mb={1}>MP</Text>
-                    <Text fontSize="sm">{previewData.characterData.mp}</Text>
+                    <Text fontSize="sm">{previewData.characterData.combatStats?.mp ?? 'N/A'}</Text>
                   </Box>
                 </Grid>
 

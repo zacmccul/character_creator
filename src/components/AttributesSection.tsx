@@ -14,7 +14,7 @@ import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loade
 import { configManager } from '@/utils/config-manager';
 
 export const AttributesSection = () => {
-  const { character, updateAttribute } = useCharacterStore();
+  const { character, updateAttribute, syncWithConfigs } = useCharacterStore();
   const { equipmentSlotsCount, consumableSlotsCount, experienceBankCount } = useDerivedStats();
   const [config, setConfig] = useState<AttributesConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
@@ -25,6 +25,8 @@ export const AttributesSection = () => {
       .then((result) => {
         if (result.success) {
           setConfig(result.config.attributes);
+          // Sync character state with loaded configs
+          syncWithConfigs(result.config.attributes, result.config.combatStats);
         } else {
           const errorMsg = configManager.formatErrors(result.errors);
           setConfigError(errorMsg);
@@ -34,7 +36,7 @@ export const AttributesSection = () => {
         console.error('Failed to load attributes configuration:', error);
         setConfigError(error.message);
       });
-  }, []);
+  }, [syncWithConfigs]);
 
   const handleAttributeChange = (attrId: string, value: string) => {
     if (!config) return;

@@ -22,8 +22,8 @@ describe('Character Types', () => {
       expect(character.name).toBe('');
       expect(character.level).toEqual([]);
       expect(character.species).toBe(Species.HUMAN);
-      expect(character.hp).toBe(10);
-      expect(character.mp).toBe(0);
+      expect(character.combatStats.hp).toBe(10);
+      expect(character.combatStats.mp).toBe(0);
       expect(character.resourceCounters).toEqual([]);
     });
 
@@ -35,6 +35,17 @@ describe('Character Types', () => {
       expect(character.attributes.INT).toBe(0);
       expect(character.attributes.WIS).toBe(0);
       expect(character.attributes.CHA).toBe(0);
+    });
+
+    it('should have combat stats record initialized', () => {
+      const character = createEmptyCharacter();
+      
+      expect(character.combatStats).toBeDefined();
+      expect(typeof character.combatStats).toBe('object');
+      // Should have default combat stats
+      expect(character.combatStats.hp).toBe(10);
+      expect(character.combatStats.mp).toBe(0);
+      expect(character.combatStats.movementRange).toBe(30);
     });
   });
 

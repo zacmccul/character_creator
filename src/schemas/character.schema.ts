@@ -49,6 +49,12 @@ export const AttributesSchema = z.object({
 });
 
 /**
+ * Combat stats schema - dynamic record of stat IDs to numbers
+ * Validates that all values are numbers
+ */
+export const CombatStatsSchema = z.record(z.string(), z.number());
+
+/**
  * Resource counter schema (number or boolean)
  */
 export const ResourceCounterSchema = z.object({
@@ -78,17 +84,12 @@ export const CharacterSheetSchema = z.object({
   species: SpeciesSchema,
   experience: ExperienceSchema,
   attributes: AttributesSchema,
-  movementRange: z.number().positive('Movement range must be positive'),
-  hp: z.number().int('HP must be an integer'),
-  mp: z.number().int().nonnegative('MP must be a non-negative integer'),
+  combatStats: CombatStatsSchema,
+  movementRange: z.number().positive('Movement range must be positive').optional(), // DEPRECATED - kept for backward compatibility
   equipmentSlots: z.array(EquipmentItemSchema),
   consumableSlots: z.array(ConsumableItemSchema),
   experienceBank: z.array(ExperienceBankItemSchema),
   resourceCounters: z.array(ResourceCounterSchema),
-  abilityBonus: z.number().int('Ability bonus must be an integer'),
-  attackPower: z.number().int('Attack power must be an integer'),
-  spellPower: z.number().int('Spell power must be an integer'),
-  range: z.number().int().positive('Range must be a positive integer'),
 }).refine(
   (data) => {
     // Validate that equipment slots length matches STR attribute
@@ -176,6 +177,15 @@ export const validateAttribute = (value: unknown): value is number => {
 };
 
 /**
+ * Validate combat stat value (generic number validation)
+ */
+export const validateCombatStat = (value: unknown): value is number => {
+  const result = z.number().safeParse(value);
+  return result.success;
+};
+
+/**
+ * DEPRECATED: Use validateCombatStat instead
  * Validate movement range value
  */
 export const validateMovementRange = (value: unknown): value is number => {
@@ -184,6 +194,7 @@ export const validateMovementRange = (value: unknown): value is number => {
 };
 
 /**
+ * DEPRECATED: Use validateCombatStat instead
  * Validate HP value
  */
 export const validateHP = (value: unknown): value is number => {
@@ -192,6 +203,7 @@ export const validateHP = (value: unknown): value is number => {
 };
 
 /**
+ * DEPRECATED: Use validateCombatStat instead
  * Validate MP value
  */
 export const validateMP = (value: unknown): value is number => {
@@ -200,6 +212,7 @@ export const validateMP = (value: unknown): value is number => {
 };
 
 /**
+ * DEPRECATED: Use validateCombatStat instead
  * Validate range value
  */
 export const validateRange = (value: unknown): value is number => {

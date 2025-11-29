@@ -148,6 +148,14 @@ export interface Attributes {
 }
 
 /**
+ * Combat statistics - dynamic record loaded from configuration
+ * Keys are stat IDs from combat-stats.json, values are numbers
+ */
+export interface CombatStats {
+  readonly [statId: string]: number;
+}
+
+/**
  * Custom resource counter (can be number or boolean)
  */
 export interface ResourceCounter {
@@ -167,17 +175,12 @@ export interface CharacterSheet {
   readonly species: Species;
   readonly experience: Experience;
   readonly attributes: Attributes;
-  readonly movementRange: number; // Positive number
-  readonly hp: number; // Integer
-  readonly mp: number; // Positive integer
+  readonly combatStats: CombatStats; // Dynamic stats loaded from config
+  readonly movementRange?: number; // DEPRECATED: Use combatStats.movementRange instead
   readonly equipmentSlots: readonly EquipmentItem[]; // Length based on STR
   readonly consumableSlots: readonly ConsumableItem[]; // Length based on DEX
   readonly experienceBank: readonly ExperienceBankItem[]; // Length based on INT
   readonly resourceCounters: readonly ResourceCounter[];
-  readonly abilityBonus: number; // Integer
-  readonly attackPower: number; // Integer
-  readonly spellPower: number; // Integer
-  readonly range: number; // Positive integer
 }
 
 // ============================================================================
@@ -200,17 +203,21 @@ export const createEmptyCharacter = (): CharacterSheet => ({
     [AttributeType.WIS]: 0,
     [AttributeType.CHA]: 0,
   },
-  movementRange: 30,
-  hp: 10,
-  mp: 0,
+  combatStats: {
+    // Default stats - will be populated from config on first load
+    hp: 10,
+    mp: 0,
+    movementRange: 30,
+    abilityBonus: 0,
+    attackPower: 0,
+    spellPower: 0,
+    range: 5,
+  },
+  movementRange: 30, // DEPRECATED - kept for backward compatibility
   equipmentSlots: [],
   consumableSlots: [],
   experienceBank: [],
   resourceCounters: [],
-  abilityBonus: 0,
-  attackPower: 0,
-  spellPower: 0,
-  range: 5,
 });
 
 /**

@@ -6,9 +6,11 @@
 import { AttributesConfigSchema } from '@/schemas/attribute-config.schema';
 import { EnumsConfigSchema } from '@/schemas/enums-config.schema';
 import { CharacterInfoConfigSchema } from '@/schemas/character-info-config.schema';
+import { CombatStatsConfigSchema } from '@/schemas/combat-stats-config.schema';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { EnumsConfig, EnumDefinition } from '@/types/enums-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
+import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import { ZodError } from 'zod';
 
 /**
@@ -27,6 +29,7 @@ export interface AppConfig {
   readonly attributes: AttributesConfig;
   readonly enums: EnumsConfig;
   readonly characterInfo: CharacterInfoConfig;
+  readonly combatStats: CombatStatsConfig;
 }
 
 /**
@@ -70,6 +73,7 @@ class ConfigManager {
     let attributes: AttributesConfig | null = null;
     let enums: EnumsConfig | null = null;
     let characterInfo: CharacterInfoConfig | null = null;
+    let combatStats: CombatStatsConfig | null = null;
 
     // Load attributes configuration
     try {
@@ -104,6 +108,17 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'characterInfo'));
     }
 
+    // Load combat stats configuration
+    try {
+      combatStats = await this.loadConfig<CombatStatsConfig>(
+        '/config/combat-stats.json',
+        CombatStatsConfigSchema,
+        'combatStats'
+      );
+    } catch (error) {
+      errors.push(...this.extractErrors(error, 'combatStats'));
+    }
+
     // Validate cross-references between configs
     if (characterInfo && enums) {
       const enumRefErrors = this.validateEnumReferences(characterInfo, enums);
@@ -111,19 +126,19 @@ class ConfigManager {
     }
 
     // Validate global ID uniqueness across all configs
-    if (attributes && enums && characterInfo) {
-      const uniquenessErrors = this.validateGlobalIdUniqueness(attributes, enums, characterInfo);
+    if (attributes && enums && characterInfo && combatStats) {
+      const uniquenessErrors = this.validateGlobalIdUniqueness(attributes, enums, characterInfo, combatStats);
       errors.push(...uniquenessErrors);
     }
 
     // If any errors occurred, return them
-    if (errors.length > 0 || !attributes || !enums || !characterInfo) {
+    if (errors.length > 0 || !attributes || !enums || !characterInfo || !combatStats) {
       this.errors = errors;
       return { success: false, errors };
     }
 
     // Cache successful config
-    this.config = { attributes, enums, characterInfo };
+    this.config = { attributes, enums, characterInfo, combatStats };
     return { success: true, config: this.config };
   }
 
@@ -212,12 +227,13 @@ class ConfigManager {
 
   /**
    * Validate that all IDs are globally unique across all configurations
-   * Enums, attributes, and character info fields must all have unique IDs
+   * Enums, attributes, character info fields, and combat stats must all have unique IDs
    */
   private validateGlobalIdUniqueness(
     attributes: AttributesConfig,
     enums: EnumsConfig,
-    characterInfo: CharacterInfoConfig
+    characterInfo: CharacterInfoConfig,
+    combatStats: CombatStatsConfig
   ): ConfigValidationError[] {
     const errors: ConfigValidationError[] = [];
     const idMap = new Map<string, { configName: string; path: string }>();
@@ -261,6 +277,20 @@ class ConfigManager {
         });
       } else {
         idMap.set(field.id, { configName: 'characterInfo', path: `fields.${index}.id` });
+      }
+    });
+
+    // Collect all combat stat IDs
+    combatStats.stats.forEach((stat, index) => {
+      const existing = idMap.get(stat.id);
+      if (existing) {
+        errors.push({
+          configName: 'combatStats',
+          path: `stats.${index}.id`,
+          message: `ID '${stat.id}' is already used in ${existing.configName} at ${existing.path}`,
+        });
+      } else {
+        idMap.set(stat.id, { configName: 'combatStats', path: `stats.${index}.id` });
       }
     });
 

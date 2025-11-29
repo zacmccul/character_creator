@@ -17,7 +17,11 @@ The application now uses a **centralized configuration system** that loads all U
 3. **Attributes Configuration** (`public/config/attributes.json`)
    - Defines attribute fields with OpenAPI-style constraints
    
-4. **Config Manager** (`src/utils/config-manager.ts`)
+4. **Combat Stats Configuration** (`public/config/combat-stats.json`)
+   - Defines combat statistics with OpenAPI-style numeric constraints
+   - Supports both integer and floating-point numbers
+   
+5. **Config Manager** (`src/utils/config-manager.ts`)
    - Centralized singleton for loading all configs
    - Validates all configurations using Zod schemas
    - Cross-validates references between configs
@@ -74,7 +78,7 @@ Defines fields for the character information section.
       "description": "Your character's name"
     },
     {
-      "id": "species",
+      "id": "character_species",
       "type": "enum",
       "label": "Species",
       "enumRef": {
@@ -104,7 +108,7 @@ Defines fields for the character information section.
 #### Enum Field
 ```json
 {
-  "id": "species",
+  "id": "character_species",
   "type": "enum",
   "label": "Species",
   "enumRef": {
@@ -125,6 +129,84 @@ Defines fields for the character information section.
 - `enumRef` (required for enum): Reference to enum ID
 - `defaultValue` (optional): Default value
 
+### 3. Combat Stats Configuration
+
+**Location:** `public/config/combat-stats.json`
+
+Defines combat statistics with OpenAPI-style numeric constraints.
+
+```json
+{
+  "title": "⚔️ Combat Stats",
+  "stats": [
+    {
+      "id": "hp",
+      "label": "HP",
+      "description": "Hit Points - Character's health",
+      "emoji": "❤️",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "movementRange",
+      "label": "Move",
+      "description": "Movement range per turn",
+      "emoji": "🏃",
+      "schema": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 5
+      }
+    }
+  ]
+}
+```
+
+**Properties:**
+- `id` (required): Unique identifier for the stat
+- `label` (required): Display label
+- `description` (required): Tooltip description
+- `emoji` (optional): Emoji icon to display
+- `schema` (required): OpenAPI-style numeric constraints
+  - `type`: "integer" or "number"
+  - `minimum`: Inclusive minimum value
+  - `maximum`: Inclusive maximum value
+  - `exclusiveMinimum`: Exclusive minimum (value must be greater than this)
+  - `exclusiveMaximum`: Exclusive maximum (value must be less than this)
+  - `default`: Default value
+
+**Example Stats:**
+
+Integer stat with minimum:
+```json
+{
+  "id": "mp",
+  "label": "MP",
+  "description": "Mana Points",
+  "schema": {
+    "type": "integer",
+    "minimum": 0,
+    "default": 0
+  }
+}
+```
+
+Float stat with exclusive minimum:
+```json
+{
+  "id": "movementRange",
+  "label": "Movement",
+  "description": "Movement speed",
+  "schema": {
+    "type": "number",
+    "exclusiveMinimum": 0,
+    "default": 5.5
+  }
+}
+```
+
 ## Config Manager API
 
 ### Loading Configuration
@@ -136,7 +218,7 @@ import { configManager, loadAppConfig } from '@/utils/config-manager';
 const result = await loadAppConfig();
 
 if (result.success) {
-  const { attributes, enums, characterInfo } = result.config;
+  const { attributes, enums, characterInfo, combatStats } = result.config;
   // Use configurations
 } else {
   // Handle errors

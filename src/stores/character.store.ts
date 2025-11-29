@@ -26,6 +26,9 @@ import {
 } from '@/types/character.types';
 import { validateCharacterSheet } from '@/schemas/character.schema';
 import { nanoid } from 'nanoid';
+import type { AttributesConfig } from '@/types/attribute-config.types';
+import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import { syncAttributesWithConfig, syncCombatStatsWithConfig } from '@/utils/config-sync';
 
 // ============================================================================
 // Store Interface
@@ -40,6 +43,11 @@ interface CharacterState {
   updateSpecies: (species: Species) => void;
   updateExperience: (experience: Experience) => void;
   updateMovementRange: (value: number) => void;
+  
+  // Actions - Combat stats (dynamic)
+  updateCombatStat: (statId: string, value: number) => void;
+  
+  // DEPRECATED: Individual stat updaters (kept for backward compatibility)
   updateHP: (value: number) => void;
   updateMP: (value: number) => void;
   updateAbilityBonus: (value: number) => void;
@@ -74,6 +82,7 @@ interface CharacterState {
   // Actions - Character management
   loadCharacter: (data: CharacterSheet) => void;
   resetCharacter: () => void;
+  syncWithConfigs: (attributesConfig: AttributesConfig, combatStatsConfig: CombatStatsConfig) => void;
   
   // Utility
   validateCurrentCharacter: () => boolean;
@@ -108,44 +117,53 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   
   updateMovementRange: (value) => {
     set((state) => ({
-      character: { ...state.character, movementRange: value },
+      character: { 
+        ...state.character, 
+        movementRange: value,
+        combatStats: {
+          ...state.character.combatStats,
+          movementRange: value,
+        },
+      },
     }));
   },
   
-  updateHP: (value) => {
+  // Combat stat updater (dynamic)
+  updateCombatStat: (statId, value) => {
     set((state) => ({
-      character: { ...state.character, hp: Math.floor(value) },
+      character: {
+        ...state.character,
+        combatStats: {
+          ...state.character.combatStats,
+          [statId]: value,
+        },
+      },
     }));
+  },
+  
+  // DEPRECATED: Individual stat updaters (use updateCombatStat instead)
+  updateHP: (value) => {
+    get().updateCombatStat('hp', Math.floor(value));
   },
   
   updateMP: (value) => {
-    set((state) => ({
-      character: { ...state.character, mp: Math.max(0, Math.floor(value)) },
-    }));
+    get().updateCombatStat('mp', Math.max(0, Math.floor(value)));
   },
   
   updateAbilityBonus: (value) => {
-    set((state) => ({
-      character: { ...state.character, abilityBonus: Math.floor(value) },
-    }));
+    get().updateCombatStat('abilityBonus', Math.floor(value));
   },
   
   updateAttackPower: (value) => {
-    set((state) => ({
-      character: { ...state.character, attackPower: Math.floor(value) },
-    }));
+    get().updateCombatStat('attackPower', Math.floor(value));
   },
   
   updateSpellPower: (value) => {
-    set((state) => ({
-      character: { ...state.character, spellPower: Math.floor(value) },
-    }));
+    get().updateCombatStat('spellPower', Math.floor(value));
   },
   
   updateRange: (value) => {
-    set((state) => ({
-      character: { ...state.character, range: Math.max(1, Math.floor(value)) },
-    }));
+    get().updateCombatStat('range', Math.max(1, Math.floor(value)));
   },
   
   // Attribute updates with derived state recalculation
@@ -362,6 +380,16 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     set({
       character: emptyCharacter,
     });
+  },
+  
+  syncWithConfigs: (attributesConfig, combatStatsConfig) => {
+    set((state) => ({
+      character: {
+        ...state.character,
+        attributes: syncAttributesWithConfig(state.character.attributes, attributesConfig),
+        combatStats: syncCombatStatsWithConfig(state.character.combatStats, combatStatsConfig),
+      },
+    }));
   },
   
   validateCurrentCharacter: () => {
