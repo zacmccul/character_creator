@@ -8,11 +8,13 @@ import { EnumsConfigSchema } from '@/schemas/enums-config.schema';
 import { CharacterInfoConfigSchema } from '@/schemas/character-info-config.schema';
 import { CombatStatsConfigSchema } from '@/schemas/combat-stats-config.schema';
 import { InventoryConfigSchema } from '@/schemas/inventory-config.schema';
+import { LevelClassConfigSchema } from '@/schemas/level-class-config.schema';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { EnumsConfig, EnumDefinition } from '@/types/enums-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
+import type { LevelClassConfig } from '@/types/level-class-config.types';
 import { ZodError } from 'zod';
 
 /**
@@ -33,6 +35,7 @@ export interface AppConfig {
   readonly characterInfo: CharacterInfoConfig;
   readonly combatStats: CombatStatsConfig;
   readonly inventory: InventoryConfig;
+  readonly levelClass: LevelClassConfig;
 }
 
 /**
@@ -78,6 +81,7 @@ class ConfigManager {
     let characterInfo: CharacterInfoConfig | null = null;
     let combatStats: CombatStatsConfig | null = null;
     let inventory: InventoryConfig | null = null;
+    let levelClass: LevelClassConfig | null = null;
 
     // Load attributes configuration
     try {
@@ -134,6 +138,17 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'inventory'));
     }
 
+    // Load level class configuration
+    try {
+      levelClass = await this.loadConfig<LevelClassConfig>(
+        '/config/level-class.json',
+        LevelClassConfigSchema,
+        'levelClass'
+      );
+    } catch (error) {
+      errors.push(...this.extractErrors(error, 'levelClass'));
+    }
+
     // Validate cross-references between configs
     if (characterInfo && enums) {
       const enumRefErrors = this.validateEnumReferences(characterInfo, enums);
@@ -146,6 +161,12 @@ class ConfigManager {
       errors.push(...inventoryEnumErrors);
     }
 
+    // Validate level class enum references
+    if (levelClass && enums) {
+      const levelClassEnumErrors = this.validateLevelClassEnumReferences(levelClass, enums);
+      errors.push(...levelClassEnumErrors);
+    }
+
     // Validate global ID uniqueness across all configs
     if (attributes && enums && characterInfo && combatStats && inventory) {
       const uniquenessErrors = this.validateGlobalIdUniqueness(attributes, enums, characterInfo, combatStats, inventory);
@@ -153,13 +174,13 @@ class ConfigManager {
     }
 
     // If any errors occurred, return them
-    if (errors.length > 0 || !attributes || !enums || !characterInfo || !combatStats || !inventory) {
+    if (errors.length > 0 || !attributes || !enums || !characterInfo || !combatStats || !inventory || !levelClass) {
       this.errors = errors;
       return { success: false, errors };
     }
 
     // Cache successful config
-    this.config = { attributes, enums, characterInfo, combatStats, inventory };
+    this.config = { attributes, enums, characterInfo, combatStats, inventory, levelClass };
     return { success: true, config: this.config };
   }
 
@@ -265,6 +286,27 @@ class ConfigManager {
         });
       }
     });
+
+    return errors;
+  }
+
+  /**
+   * Validate that level class configuration references a valid enum
+   */
+  private validateLevelClassEnumReferences(
+    levelClass: LevelClassConfig,
+    enums: EnumsConfig
+  ): ConfigValidationError[] {
+    const errors: ConfigValidationError[] = [];
+    const enumIds = new Set(enums.enums.map((e) => e.id));
+
+    if (!enumIds.has(levelClass.classEnum.enumId)) {
+      errors.push({
+        configName: 'levelClass',
+        path: 'classEnum.enumId',
+        message: `Referenced enum '${levelClass.classEnum.enumId}' not found in enums configuration`,
+      });
+    }
 
     return errors;
   }

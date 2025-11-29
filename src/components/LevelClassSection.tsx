@@ -1,8 +1,10 @@
 /**
  * Level & Class Section Component
  * Multiclass support with add/remove functionality
+ * Configuration-driven using level-class.json
  */
 
+import { useEffect, useState } from 'react';
 import { Box, Button, Card, Flex, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { Field } from '@/components/ui/field';
@@ -11,11 +13,41 @@ import { useCharacterStore, useDerivedStats } from '@/stores/character.store';
 import { CharacterClass } from '@/types/character.types';
 import { PlusCircle, XCircle } from 'lucide-react';
 import { ChangeEvent } from 'react';
+import type { LevelClassConfig } from '@/types/level-class-config.types';
+import { configManager } from '@/utils/config-manager';
 
 export const LevelClassSection = () => {
   const { character, addLevel, updateLevel, updateLevelClass, removeLevel } =
     useCharacterStore();
   const { totalLevel } = useDerivedStats();
+  const [config, setConfig] = useState<LevelClassConfig | null>(null);
+  const [configError, setConfigError] = useState<string | null>(null);
+  const [classValues, setClassValues] = useState<readonly string[]>([]);
+
+  // Load configuration on mount
+  useEffect(() => {
+    configManager.loadAllConfigs()
+      .then((result) => {
+        if (result.success) {
+          setConfig(result.config.levelClass);
+          
+          // Load class enum values
+          const classEnum = configManager.getEnum(result.config.levelClass.classEnum.enumId);
+          if (classEnum) {
+            setClassValues(classEnum.values);
+          } else {
+            setConfigError(`Enum '${result.config.levelClass.classEnum.enumId}' not found`);
+          }
+        } else {
+          const errorMsg = configManager.formatErrors(result.errors);
+          setConfigError(errorMsg);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load configuration:', error);
+        setConfigError(error.message);
+      });
+  }, []);
 
   const handleLevelChange = (index: number, value: string) => {
     const numValue = parseInt(value, 10);
@@ -24,12 +56,39 @@ export const LevelClassSection = () => {
     }
   };
 
+  // Show error state if config failed to load
+  if (configError) {
+    return (
+      <Card.Root>
+        <Card.Header>
+          <Text fontSize="lg" fontWeight="semibold" color="red.500">
+            Configuration Error
+          </Text>
+        </Card.Header>
+        <Card.Body>
+          <Text fontSize="sm" whiteSpace="pre-wrap">{configError}</Text>
+        </Card.Body>
+      </Card.Root>
+    );
+  }
+
+  // Show loading state while config is loading
+  if (!config || classValues.length === 0) {
+    return (
+      <Card.Root>
+        <Card.Header>
+          <Text fontSize="lg" fontWeight="semibold">Loading...</Text>
+        </Card.Header>
+      </Card.Root>
+    );
+  }
+
   return (
     <Card.Root>
       <Card.Header>
         <Flex align="center" justify="space-between">
           <Flex align="center" gap={2}>
-            <Text fontSize="lg" fontWeight="semibold">🎭 Classes & Levels</Text>
+            <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
           </Flex>
           <Flex align="center" gap={2} borderRadius="lg" borderWidth="1px" bg="gray.100" px={3} py={1.5}>
             <Text fontSize="sm" fontWeight="medium">Total Level:</Text>
@@ -50,7 +109,7 @@ export const LevelClassSection = () => {
               borderStyle="dashed"
             >
               <Text fontSize="sm" color="gray.600">
-                No classes added yet. Click "Add Class" to begin.
+                {config.emptyStateText}
               </Text>
             </Flex>
           ) : (
@@ -76,7 +135,7 @@ export const LevelClassSection = () => {
                             updateLevelClass(index, e.target.value as CharacterClass)
                           }
                         >
-                          {Object.values(CharacterClass).map((cls) => (
+                          {classValues.map((cls) => (
                             <option key={cls} value={cls}>
                               {cls}
                             </option>
@@ -88,12 +147,12 @@ export const LevelClassSection = () => {
 
                   {/* Level Input */}
                   <Box w="24">
-                    <Field label="Level">
+                    <Field label={config.levelField.label}>
                       <Input
                         id={`level-${index}`}
                         type="number"
-                        min={1}
-                        max={20}
+                        min={config.levelField.min}
+                        max={config.levelField.max}
                         value={entry.level}
                         onChange={(e) => handleLevelChange(index, e.target.value)}
                         textAlign="center"
@@ -121,21 +180,24 @@ export const LevelClassSection = () => {
 
           {/* Add Class Button */}
           <Button
-            onClick={() => addLevel(CharacterClass.FIGHTER)}
+            onClick={() => addLevel(classValues[0] as CharacterClass)}
             variant="outline"
             width="full"
             borderStyle="dashed"
           >
             <PlusCircle size={16} style={{ marginRight: 8 }} />
-            Add Class
+            {config.addButtonText}
           </Button>
 
           {/* Info Box */}
           {character.level.length > 1 && (
             <Box borderRadius="lg" borderWidth="1px" bg="blue.50" p={3}>
               <Text fontSize="sm">
-                💡 <Text as="strong">Multiclassing:</Text> You have {character.level.length} classes
-                for a total level of <Text as="strong">{totalLevel}</Text>.
+                {config.multiclassInfoTemplate
+                  .replace('{count}', character.level.length.toString())
+                  .replace('{total}', totalLevel.toString())
+                  .split('**')
+                  .map((part, i) => i % 2 === 1 ? <Text as="strong" key={i}>{part}</Text> : part)}
               </Text>
             </Box>
           )}
