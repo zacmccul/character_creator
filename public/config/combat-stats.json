@@ -64,9 +64,9 @@
       }
     },
     {
-      "id": "range",
-      "label": "Range",
-      "description": "Null",
+      "id": "ArmorValue",
+      "label": "AV",
+      "description": "Armor Value. Determines the probability of an attack hitting you.",
       "emoji": "🎯",
       "schema": {
         "type": "integer",
@@ -75,9 +75,9 @@
       }
     },
     {
-      "id": "magicAbility",
-      "label": "Magic",
-      "description": "Null",
+      "id": "DamageReduction",
+      "label": "DR",
+      "description": "Damage Reduction. Cuts damage by the listed amount at the end of Damage Calculation",
       "emoji": "🪄",
       "schema": {
         "type": "integer",
