@@ -6,11 +6,13 @@
 import { useEffect, useState } from 'react';
 import { Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
+import { Tooltip } from '@/components/ui/tooltip';
 import { NativeSelectRoot, NativeSelectField } from '@/components/ui/native-select';
 import { useCharacterStore } from '@/stores/character.store';
 import { ChangeEvent } from 'react';
 import type { CharacterInfoConfig, FieldConfig } from '@/types/character-info-config.types';
 import { configManager } from '@/utils/config-manager';
+import { getEnumValueName, getEnumValueDescription, findEnumValueByName } from '@/utils/enum-helpers';
 
 export const CharacterInfo = () => {
   const { character, updateCharacterInfo } = useCharacterStore();
@@ -80,24 +82,41 @@ export const CharacterInfo = () => {
         );
       }
 
+      // Find the selected enum value to check for description
+      const selectedValue = value ? findEnumValueByName(enumDef.values, value) : undefined;
+      const selectedDesc = selectedValue ? getEnumValueDescription(selectedValue) : undefined;
+
+      const selectField = (
+        <NativeSelectRoot>
+          <NativeSelectField
+            id={field.id}
+            value={value}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => 
+              handleFieldChange(field.id, e.target.value)
+            }
+            title={selectedDesc ? undefined : field.description}
+          >
+            {enumDef.values.map((enumValue) => {
+              const name = getEnumValueName(enumValue);
+              return (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              );
+            })}
+          </NativeSelectField>
+        </NativeSelectRoot>
+      );
+
       return (
         <Field key={field.id} label={field.label}>
-          <NativeSelectRoot>
-            <NativeSelectField
-              id={field.id}
-              value={value}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => 
-                handleFieldChange(field.id, e.target.value)
-              }
-              title={field.description}
-            >
-              {enumDef.values.map((enumValue) => (
-                <option key={enumValue} value={enumValue}>
-                  {enumValue}
-                </option>
-              ))}
-            </NativeSelectField>
-          </NativeSelectRoot>
+          {selectedDesc ? (
+            <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+              {selectField}
+            </Tooltip>
+          ) : (
+            selectField
+          )}
         </Field>
       );
     }

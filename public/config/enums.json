@@ -5,10 +5,10 @@
       "label": "Species",
       "description": "Available character species/races",
       "values": [
-        "Ourlean",
-        "Gex",
-        "Rodensha",
-        "Hanoan"
+        { "name": "Ourlean", "desc": "Versatile and adaptable humanoids" },
+        { "name": "Gex", "desc": "Reptilian beings with natural camouflage" },
+        { "name": "Rodensha", "desc": "Quick and resourceful small folk" },
+        { "name": "Hanoan", "desc": "Noble warriors with strong traditions" }
       ]
     },
     {
@@ -33,13 +33,13 @@
       "label": "Character Classes",
       "description": "Available character classes",
       "values": [
-        "Soldier",
-        "Duelist",
-        "Warrior",
-        "Medicant",
-        "Engineer",
-        "Artiste",
-        "Voidsman"
+        { "name": "Soldier", "desc": "Tactical combatant with battlefield expertise" },
+        { "name": "Duelist", "desc": "Precise fighter specializing in one-on-one combat" },
+        { "name": "Warrior", "desc": "Mighty combatant with raw physical power" },
+        { "name": "Medicant", "desc": "Healer and support specialist" },
+        { "name": "Engineer", "desc": "Master of devices and technological solutions" },
+        { "name": "Artiste", "desc": "Creative performer who channels magic through art" },
+        { "name": "Voidsman", "desc": "Manipulator of void energy and space" }
       ]
     },
     {
@@ -48,18 +48,18 @@
       "description": "Available equipment items",
       "values": [
         "None",
-        "Longsword",
-        "Shortsword",
-        "Greatsword",
-        "Dagger",
-        "Bow",
-        "Crossbow",
-        "Staff",
-        "Wand",
-        "Shield",
-        "Light Armor",
-        "Medium Armor",
-        "Heavy Armor",
+        { "name": "Longsword", "desc": "A versatile one-handed blade" },
+        { "name": "Shortsword", "desc": "Quick and nimble blade" },
+        { "name": "Greatsword", "desc": "Massive two-handed weapon" },
+        { "name": "Dagger", "desc": "Small concealable blade" },
+        { "name": "Bow", "desc": "Ranged weapon for precision strikes" },
+        { "name": "Crossbow", "desc": "Mechanical ranged weapon" },
+        { "name": "Staff", "desc": "Magical focus and melee weapon" },
+        { "name": "Wand", "desc": "Precise magical implement" },
+        { "name": "Shield", "desc": "Defensive tool for blocking attacks" },
+        { "name": "Light Armor", "desc": "Flexible protection with minimal encumbrance" },
+        { "name": "Medium Armor", "desc": "Balanced protection and mobility" },
+        { "name": "Heavy Armor", "desc": "Maximum protection at the cost of mobility" },
         "Backpack",
         "Rope",
         "Torch",

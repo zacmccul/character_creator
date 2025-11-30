@@ -6,6 +6,7 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { Box, Card, Flex, Grid, Tabs, Text, IconButton } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
+import { Tooltip } from '@/components/ui/tooltip';
 import { NativeSelectRoot, NativeSelectField } from '@/components/ui/native-select';
 import { useCharacterStore } from '@/stores/character.store';
 import type { InventoryConfig } from '@/types/inventory-config.types';
@@ -13,6 +14,7 @@ import type { EnumDefinition } from '@/types/enums-config.types';
 import { configManager, getEnumById } from '@/utils/config-manager';
 import { evaluateFormula } from '@/utils/formula-evaluator';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getEnumValueName, getEnumValueDescription, findEnumValueByName } from '@/utils/enum-helpers';
 
 export const InventorySection = () => {
   const { character, updateInventorySlot, syncWithAllConfigs } = useCharacterStore();
@@ -177,8 +179,12 @@ export const InventorySection = () => {
                     </Flex>
                   ) : (
                     <Grid gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
-                      {currentSlots.slice(0, slotCount).map((item, index) => (
-                        <Field key={index} label={`${tab.emoji} Slot ${index + 1}`}>
+                      {currentSlots.slice(0, slotCount).map((item, index) => {
+                        // Find the selected enum value to check for description
+                        const selectedValue = item ? findEnumValueByName(enumDef?.values || [], item) : undefined;
+                        const selectedDesc = selectedValue ? getEnumValueDescription(selectedValue) : undefined;
+
+                        const selectField = (
                           <NativeSelectRoot>
                             <NativeSelectField
                               id={`${tab.id}-${index}`}
@@ -186,17 +192,33 @@ export const InventorySection = () => {
                               onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                                 updateInventorySlot(tab.id, index, e.target.value)
                               }
+                              title={selectedDesc ? undefined : `Select ${tab.label.toLowerCase()}`}
                             >
                               <option value="">Select {tab.label.toLowerCase()}...</option>
-                              {enumDef?.values.map((enumValue) => (
-                                <option key={enumValue} value={enumValue}>
-                                  {enumValue}
-                                </option>
-                              ))}
+                              {enumDef?.values.map((enumValue) => {
+                                const name = getEnumValueName(enumValue);
+                                return (
+                                  <option key={name} value={name}>
+                                    {name}
+                                  </option>
+                                );
+                              })}
                             </NativeSelectField>
                           </NativeSelectRoot>
-                        </Field>
-                      ))}
+                        );
+
+                        return (
+                          <Field key={index} label={`${tab.emoji} Slot ${index + 1}`}>
+                            {selectedDesc ? (
+                              <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+                                {selectField}
+                              </Tooltip>
+                            ) : (
+                              selectField
+                            )}
+                          </Field>
+                        );
+                      })}
                     </Grid>
                   )}
                 </Box>

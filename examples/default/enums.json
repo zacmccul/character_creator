@@ -5,9 +5,9 @@
       "label": "Species",
       "description": "Available character species/races",
       "values": [
-        "Human",
-        "Elf",
-        "Dwarf",
+        { "name": "Human", "desc": "Versatile and adaptable" },
+        { "name": "Elf", "desc": "Graceful and long-lived" },
+        { "name": "Dwarf", "desc": "Sturdy and resilient" },
         "Halfling",
         "Orc",
         "Gnome",

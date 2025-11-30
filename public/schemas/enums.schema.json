@@ -37,13 +37,30 @@
         },
         "values": {
           "type": "array",
-          "description": "List of possible values for this enum",
+          "description": "List of possible values for this enum (strings or objects with name/desc)",
           "items": {
-            "type": "string",
-            "minLength": 1
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "desc": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
           },
-          "minItems": 1,
-          "uniqueItems": true
+          "minItems": 1
         }
       },
       "additionalProperties": false

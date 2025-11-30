@@ -30,6 +30,7 @@ import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
 import { syncAttributesWithConfig, syncCombatStatsWithConfig, syncInventorySlotsWithConfig } from '@/utils/config-sync';
 import { getEnumById, configManager } from '@/utils/config-manager';
+import { getEnumValueName } from '@/utils/enum-helpers';
 
 // ============================================================================
 // Store Interface
@@ -239,7 +240,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
       if (state._inventoryConfig) {
         const getEnumDefaultValue = (enumId: string): string => {
           const enumDef = getEnumById(enumId);
-          return enumDef?.values[0] || '';
+          return enumDef?.values[0] ? getEnumValueName(enumDef.values[0]) : '';
         };
         
         newInventorySlots = syncInventorySlotsWithConfig(
@@ -507,7 +508,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
       // Helper to get first enum value
       const getEnumDefaultValue = (enumId: string): string => {
         const enumDef = getEnumById(enumId);
-        return enumDef?.values[0] || '';
+        return enumDef?.values[0] ? getEnumValueName(enumDef.values[0]) : '';
       };
       
       return {

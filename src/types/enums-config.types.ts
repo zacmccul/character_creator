@@ -4,14 +4,19 @@
  */
 
 /**
+ * Enum value - can be a simple string or an object with name and description
+ */
+export type EnumValue = string | { name: string; desc?: string };
+
+/**
  * Single enum definition
- * Maps an ID to a list of string values
+ * Maps an ID to a list of values (strings or objects)
  */
 export interface EnumDefinition {
   readonly id: string; // Unique identifier (e.g., "species", "classes")
   readonly label: string; // Human-readable name for the enum
   readonly description?: string; // Optional description
-  readonly values: readonly string[]; // Array of enum values
+  readonly values: readonly EnumValue[]; // Array of enum values
 }
 
 /**

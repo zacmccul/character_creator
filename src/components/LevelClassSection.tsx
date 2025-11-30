@@ -14,7 +14,9 @@ import { CharacterClass } from '@/types/character.types';
 import { PlusCircle, XCircle } from 'lucide-react';
 import { ChangeEvent } from 'react';
 import type { LevelClassConfig } from '@/types/level-class-config.types';
+import type { EnumValue } from '@/types/enums-config.types';
 import { configManager } from '@/utils/config-manager';
+import { getEnumValueName, getEnumValueDescription, findEnumValueByName } from '@/utils/enum-helpers';
 
 export const LevelClassSection = () => {
   const { character, addLevel, updateLevel, updateLevelClass, removeLevel } =
@@ -22,7 +24,7 @@ export const LevelClassSection = () => {
   const { totalLevel } = useDerivedStats();
   const [config, setConfig] = useState<LevelClassConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
-  const [classValues, setClassValues] = useState<readonly string[]>([]);
+  const [classValues, setClassValues] = useState<readonly EnumValue[]>([]);
 
   // Load configuration on mount
   useEffect(() => {
@@ -127,21 +129,40 @@ export const LevelClassSection = () => {
                   {/* Class Selection */}
                   <Box flex={1}>
                     <Field label="Class">
-                      <NativeSelectRoot>
-                        <NativeSelectField
-                          id={`class-${index}`}
-                          value={entry.class}
-                          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                            updateLevelClass(index, e.target.value as CharacterClass)
-                          }
-                        >
-                          {classValues.map((cls) => (
-                            <option key={cls} value={cls}>
-                              {cls}
-                            </option>
-                          ))}
-                        </NativeSelectField>
-                      </NativeSelectRoot>
+                      {(() => {
+                        // Find the selected enum value to check for description
+                        const selectedValue = findEnumValueByName(classValues, entry.class);
+                        const selectedDesc = selectedValue ? getEnumValueDescription(selectedValue) : undefined;
+
+                        const selectField = (
+                          <NativeSelectRoot>
+                            <NativeSelectField
+                              id={`class-${index}`}
+                              value={entry.class}
+                              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                                updateLevelClass(index, e.target.value as CharacterClass)
+                              }
+                            >
+                              {classValues.map((cls) => {
+                                const name = getEnumValueName(cls);
+                                return (
+                                  <option key={name} value={name}>
+                                    {name}
+                                  </option>
+                                );
+                              })}
+                            </NativeSelectField>
+                          </NativeSelectRoot>
+                        );
+
+                        return selectedDesc ? (
+                          <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+                            {selectField}
+                          </Tooltip>
+                        ) : (
+                          selectField
+                        );
+                      })()}
                     </Field>
                   </Box>
 

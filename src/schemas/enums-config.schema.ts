@@ -6,21 +6,34 @@
 import { z } from 'zod';
 
 /**
+ * Enum value - can be a simple string or an object with name and optional description
+ */
+export const EnumValueSchema = z.union([
+  z.string().min(1, 'Enum value string cannot be empty'),
+  z.object({
+    name: z.string().min(1, 'Enum value name cannot be empty'),
+    desc: z.string().optional(),
+  }),
+]);
+
+/**
  * Single enum definition validator
  */
 export const EnumDefinitionSchema = z.object({
   id: z.string().min(1, 'Enum ID cannot be empty'),
   label: z.string().min(1, 'Enum label cannot be empty'),
   description: z.string().optional(),
-  values: z.array(z.string()).min(1, 'Enum must have at least one value'),
+  values: z.array(EnumValueSchema).min(1, 'Enum must have at least one value'),
 }).refine(
   (data) => {
     // Validate that all values are unique within this enum
-    const uniqueValues = new Set(data.values);
-    return data.values.length === uniqueValues.size;
+    // Extract names for comparison
+    const names = data.values.map(v => typeof v === 'string' ? v : v.name);
+    const uniqueNames = new Set(names);
+    return names.length === uniqueNames.size;
   },
   {
-    message: 'All enum values must be unique',
+    message: 'All enum value names must be unique',
   }
 );
 

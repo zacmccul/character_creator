@@ -63,6 +63,60 @@ describe('EnumDefinitionSchema', () => {
     const result = EnumDefinitionSchema.safeParse(withoutDesc);
     expect(result.success).toBe(true);
   });
+
+  it('accepts enum values as strings', () => {
+    const result = EnumDefinitionSchema.safeParse(mockEnumDef);
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts enum values as objects with name and desc', () => {
+    const withDescriptions: EnumDefinition = {
+      id: 'species',
+      label: 'Species',
+      values: [
+        { name: 'Human', desc: 'Versatile and adaptable' },
+        { name: 'Elf', desc: 'Graceful and long-lived' },
+        { name: 'Dwarf' },
+      ],
+    };
+    const result = EnumDefinitionSchema.safeParse(withDescriptions);
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts mixed enum values (strings and objects)', () => {
+    const mixed: EnumDefinition = {
+      id: 'items',
+      label: 'Items',
+      values: [
+        'None',
+        { name: 'Sword', desc: 'A sharp blade' },
+        'Shield',
+        { name: 'Potion', desc: 'Restores health' },
+      ],
+    };
+    const result = EnumDefinitionSchema.safeParse(mixed);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects enum value object without name', () => {
+    const invalid = {
+      id: 'test',
+      label: 'Test',
+      values: [{ desc: 'Missing name' }],
+    };
+    const result = EnumDefinitionSchema.safeParse(invalid);
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects duplicate names across string and object values', () => {
+    const invalid = {
+      id: 'test',
+      label: 'Test',
+      values: ['Sword', { name: 'Sword', desc: 'Duplicate' }],
+    };
+    const result = EnumDefinitionSchema.safeParse(invalid);
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('EnumsConfigSchema', () => {
