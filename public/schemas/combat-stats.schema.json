@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://character-creator/schemas/combat-stats.json",
+  "title": "Combat Stats Configuration",
+  "description": "Configuration for combat statistics",
+  "type": "object",
+  "required": ["title", "stats"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Section title displayed in the UI",
+      "minLength": 1
+    },
+    "stats": {
+      "type": "array",
+      "description": "List of combat stat definitions",
+      "items": {
+        "$ref": "#/definitions/stat"
+      },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "stat": {
+      "type": "object",
+      "required": ["id", "label", "description", "schema"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the stat (e.g., 'hp', 'ac')",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "label": {
+          "type": "string",
+          "description": "Display name for the stat",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Tooltip description for the stat"
+        },
+        "emoji": {
+          "type": "string",
+          "description": "Optional emoji icon"
+        },
+        "schema": {
+          "$ref": "#/definitions/numericSchema"
+        }
+      },
+      "additionalProperties": false
+    },
+    "numericSchema": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["integer", "number"],
+          "description": "Data type for the stat value (only numeric types supported)"
+        },
+        "minimum": {
+          "type": "number",
+          "description": "Minimum allowed value (inclusive)"
+        },
+        "maximum": {
+          "type": "number",
+          "description": "Maximum allowed value (inclusive)"
+        },
+        "exclusiveMinimum": {
+          "type": "number",
+          "description": "Minimum allowed value (exclusive)"
+        },
+        "exclusiveMaximum": {
+          "type": "number",
+          "description": "Maximum allowed value (exclusive)"
+        },
+        "multipleOf": {
+          "type": "number",
+          "description": "Value must be a multiple of this number",
+          "exclusiveMinimum": 0
+        },
+        "default": {
+          "type": "number",
+          "description": "Default value for the stat"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://character-creator/schemas/level-class.json",
+  "title": "Level & Class Configuration",
+  "description": "Configuration for character class and level management with multiclassing support",
+  "type": "object",
+  "required": ["title", "classEnum", "levelField"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Section title displayed in the UI",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional section description"
+    },
+    "classEnum": {
+      "type": "object",
+      "required": ["enumId"],
+      "properties": {
+        "enumId": {
+          "type": "string",
+          "description": "Reference to the enum ID in enums.json that defines available classes",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "levelField": {
+      "type": "object",
+      "required": ["label", "min", "max", "default"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Label for the level field",
+          "minLength": 1
+        },
+        "min": {
+          "type": "integer",
+          "description": "Minimum level allowed",
+          "minimum": 1
+        },
+        "max": {
+          "type": "integer",
+          "description": "Maximum level allowed",
+          "minimum": 1
+        },
+        "default": {
+          "type": "integer",
+          "description": "Default starting level",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "addButtonText": {
+      "type": "string",
+      "description": "Text for the 'Add Class' button",
+      "default": "Add Class"
+    },
+    "emptyStateText": {
+      "type": "string",
+      "description": "Text to display when no classes are added",
+      "default": "No classes added yet."
+    },
+    "multiclassInfoTemplate": {
+      "type": "string",
+      "description": "Template for multiclass info message. Use {count} for number of classes and {total} for total level",
+      "default": "You have {count} classes for a total level of {total}."
+    }
+  }
+}

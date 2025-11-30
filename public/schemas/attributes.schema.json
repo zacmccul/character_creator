@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://character-creator/schemas/attributes.json",
+  "title": "Attributes Configuration",
+  "description": "Configuration for character attributes (ability scores)",
+  "type": "object",
+  "required": ["title", "attributes"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Section title displayed in the UI",
+      "minLength": 1
+    },
+    "attributes": {
+      "type": "array",
+      "description": "List of attribute definitions",
+      "items": {
+        "$ref": "#/definitions/attribute"
+      },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "attribute": {
+      "type": "object",
+      "required": ["id", "label", "description", "schema"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the attribute (e.g., 'STR', 'DEX')",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "label": {
+          "type": "string",
+          "description": "Display name for the attribute",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Tooltip description for the attribute"
+        },
+        "emoji": {
+          "type": "string",
+          "description": "Optional emoji icon"
+        },
+        "color": {
+          "type": "string",
+          "description": "Optional Chakra UI color scheme (e.g., 'red', 'blue', 'green')"
+        },
+        "schema": {
+          "$ref": "#/definitions/numericSchema"
+        }
+      },
+      "additionalProperties": false
+    },
+    "numericSchema": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["integer", "number"],
+          "description": "Data type for the attribute value"
+        },
+        "minimum": {
+          "type": "number",
+          "description": "Minimum allowed value (inclusive)"
+        },
+        "maximum": {
+          "type": "number",
+          "description": "Maximum allowed value (inclusive)"
+        },
+        "exclusiveMinimum": {
+          "type": "number",
+          "description": "Minimum allowed value (exclusive)"
+        },
+        "exclusiveMaximum": {
+          "type": "number",
+          "description": "Maximum allowed value (exclusive)"
+        },
+        "multipleOf": {
+          "type": "number",
+          "description": "Value must be a multiple of this number",
+          "exclusiveMinimum": 0
+        },
+        "default": {
+          "type": "number",
+          "description": "Default value for the attribute"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

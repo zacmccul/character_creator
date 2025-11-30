@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://character-creator/schemas/layout.json",
+  "title": "Layout Configuration",
+  "description": "Configuration for the character sheet layout and component arrangement",
+  "type": "object",
+  "required": ["version", "name", "columns", "items"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Layout configuration version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the layout",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the layout"
+    },
+    "columns": {
+      "type": "array",
+      "description": "Column definitions for the layout",
+      "items": {
+        "$ref": "#/definitions/column"
+      },
+      "minItems": 1
+    },
+    "columnGap": {
+      "type": "number",
+      "description": "Gap between columns in Chakra UI spacing units",
+      "minimum": 0,
+      "default": 4
+    },
+    "itemGap": {
+      "type": "number",
+      "description": "Gap between items within a column in Chakra UI spacing units",
+      "minimum": 0,
+      "default": 4
+    },
+    "items": {
+      "type": "array",
+      "description": "Component items to render in the layout",
+      "items": {
+        "$ref": "#/definitions/layoutItem"
+      },
+      "minItems": 1
+    },
+    "container": {
+      "$ref": "#/definitions/containerConfig"
+    }
+  },
+  "definitions": {
+    "column": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Fixed width (e.g., '300px', '1fr')"
+            },
+            {
+              "type": "object",
+              "description": "Responsive width values",
+              "properties": {
+                "base": {
+                  "type": "string"
+                },
+                "sm": {
+                  "type": "string"
+                },
+                "md": {
+                  "type": "string"
+                },
+                "lg": {
+                  "type": "string"
+                },
+                "xl": {
+                  "type": "string"
+                },
+                "2xl": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Descriptive label for the column (for documentation)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "layoutItem": {
+      "type": "object",
+      "required": ["componentId", "column"],
+      "properties": {
+        "componentId": {
+          "type": "string",
+          "enum": [
+            "character-info",
+            "attributes",
+            "combat-stats",
+            "level-class",
+            "resource-counters",
+            "inventory"
+          ],
+          "description": "ID of the component to render"
+        },
+        "column": {
+          "type": "integer",
+          "description": "Column index (0-based) where this component should be placed",
+          "minimum": 0
+        },
+        "minH": {
+          "type": "string",
+          "description": "Minimum height for the component (e.g., '200px', 'auto')",
+          "default": "auto"
+        },
+        "display": {
+          "type": "string",
+          "description": "CSS display property",
+          "default": "block"
+        },
+        "className": {
+          "type": "string",
+          "description": "Optional CSS class name"
+        }
+      },
+      "additionalProperties": false
+    },
+    "containerConfig": {
+      "type": "object",
+      "properties": {
+        "maxW": {
+          "type": "string",
+          "description": "Maximum width of the container (e.g., 'container.xl', '1200px')",
+          "default": "container.xl"
+        },
+        "px": {
+          "type": "number",
+          "description": "Horizontal padding in Chakra UI spacing units",
+          "minimum": 0,
+          "default": 4
+        },
+        "py": {
+          "type": "number",
+          "description": "Vertical padding in Chakra UI spacing units",
+          "minimum": 0,
+          "default": 4
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

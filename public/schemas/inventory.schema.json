@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://character-creator/schemas/inventory.json",
+  "title": "Inventory Configuration",
+  "description": "Configuration for inventory tabs and slots",
+  "type": "object",
+  "required": ["title", "tabs"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Section title displayed in the UI",
+      "minLength": 1
+    },
+    "tabs": {
+      "type": "array",
+      "description": "List of inventory tab definitions",
+      "items": {
+        "$ref": "#/definitions/tab"
+      },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "tab": {
+      "type": "object",
+      "required": ["id", "label", "itemEnumId", "slotFormula"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the tab",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_-]*$"
+        },
+        "label": {
+          "type": "string",
+          "description": "Display label for the tab",
+          "minLength": 1
+        },
+        "emoji": {
+          "type": "string",
+          "description": "Optional emoji icon for the tab"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of what this tab contains"
+        },
+        "itemEnumId": {
+          "type": "string",
+          "description": "Reference to an enum ID in enums.json that defines available items",
+          "minLength": 1
+        },
+        "slotFormula": {
+          "type": "string",
+          "description": "Formula for calculating number of slots. Can be a number (e.g., '10') or formula (e.g., 'STR + 5')",
+          "minLength": 1,
+          "examples": ["10", "STR", "DEX + 5", "INT * 2"]
+        },
+        "emptySlotMessage": {
+          "type": "string",
+          "description": "Message to display when there are no slots"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
