@@ -28,7 +28,7 @@
       "description": "Movement range per turn",
       "emoji": "🏃",
       "schema": {
-        "type": "number",
+        "type": "integer",
         "exclusiveMinimum": 0,
         "default": 5
       }
