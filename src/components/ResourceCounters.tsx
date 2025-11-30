@@ -70,15 +70,16 @@ export const ResourceCounters = () => {
               {character.resourceCounters.map((counter) => (
                 <Flex
                   key={counter.id}
-                  align="flex-end"
+                  direction={{ base: 'column', md: 'row' }}
+                  align={{ base: 'stretch', md: 'flex-end' }}
                   gap={3}
                   borderRadius="lg"
                   borderWidth="1px"
                   bg="white"
                   p={4}
                 >
-                  {/* Counter Name */}
-                  <Box flex={1}>
+                  {/* Counter Name - Full width on mobile */}
+                  <Box flex={{ base: undefined, md: 1 }} w={{ base: 'full', md: 'auto' }} minW={{ md: '150px' }}>
                     <Field label="Name">
                       <Input
                         id={`counter-name-${counter.id}`}
@@ -91,8 +92,27 @@ export const ResourceCounters = () => {
                     </Field>
                   </Box>
 
+                  {/* Type Display - Full width on mobile, before value */}
+                  <Box w={{ base: 'full', md: '24' }} display={{ base: 'block', md: 'block' }} order={{ base: 2, md: 3 }}>
+                    <Field label="Type">
+                      <Flex
+                        h={10}
+                        align="center"
+                        justify="center"
+                        borderRadius="md"
+                        borderWidth="1px"
+                        bg="gray.100"
+                        px={3}
+                        fontSize="xs"
+                        fontWeight="medium"
+                      >
+                        {counter.type}
+                      </Flex>
+                    </Field>
+                  </Box>
+
                   {/* Counter Value */}
-                  <Box w="32">
+                  <Box w={{ base: 'full', md: '32' }} order={{ base: 3, md: 2 }}>
                     <Field label="Value">
                       {counter.type === 'number' ? (
                         <Input
@@ -122,37 +142,20 @@ export const ResourceCounters = () => {
                     </Field>
                   </Box>
 
-                  {/* Type Display */}
-                  <Box w="24">
-                    <Field label="Type">
-                      <Flex
-                        h={10}
-                        align="center"
-                        justify="center"
-                        borderRadius="md"
-                        borderWidth="1px"
-                        bg="gray.100"
-                        px={3}
-                        fontSize="xs"
-                        fontWeight="medium"
-                      >
-                        {counter.type}
-                      </Flex>
-                    </Field>
-                  </Box>
-
                   {/* Delete Button */}
-                  <Tooltip content={<Text fontSize="sm">Delete this counter</Text>}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => deleteResourceCounter(counter.id)}
-                      colorPalette="red"
-                      aria-label={`Delete ${counter.name}`}
-                    >
-                      <Trash2 size={16} />
-                    </Button>
-                  </Tooltip>
+                  <Flex align={{ base: 'center', md: 'flex-end' }} justify={{ base: 'center', md: 'flex-start' }} order={4}>
+                    <Tooltip content={<Text fontSize="sm">Delete this counter</Text>}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => deleteResourceCounter(counter.id)}
+                        colorPalette="red"
+                        aria-label={`Delete ${counter.name}`}
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </Tooltip>
+                  </Flex>
                 </Flex>
               ))}
             </Flex>
@@ -164,8 +167,8 @@ export const ResourceCounters = () => {
               <Flex align="center" gap={2}>
                 <Text fontSize="sm" fontWeight="medium">➕ Add New Counter</Text>
               </Flex>
-              <Flex align="flex-end" gap={3}>
-                <Box flex={1}>
+              <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'stretch', md: 'flex-end' }} gap={3}>
+                <Box flex={{ base: undefined, md: 1 }} w={{ base: 'full', md: 'auto' }} minW={{ md: '150px' }}>
                   <Field label="Name">
                     <Input
                       id="new-counter-name"
@@ -181,7 +184,7 @@ export const ResourceCounters = () => {
                   </Field>
                 </Box>
 
-                <Box w="32">
+                <Box w={{ base: 'full', md: '32' }}>
                   <Field label="Type">
                     <NativeSelectRoot>
                       <NativeSelectField
@@ -198,13 +201,15 @@ export const ResourceCounters = () => {
                   </Field>
                 </Box>
 
-                <Button
-                  onClick={handleAddCounter}
-                  disabled={!newCounterName.trim()}
-                  size="sm"
-                >
-                  <PlusCircle size={16} />
-                </Button>
+                <Flex align={{ base: 'center', md: 'flex-end' }} justify={{ base: 'center', md: 'flex-start' }}>
+                  <Button
+                    onClick={handleAddCounter}
+                    disabled={!newCounterName.trim()}
+                    size="sm"
+                  >
+                    <PlusCircle size={16} />
+                  </Button>
+                </Flex>
               </Flex>
             </Flex>
           </Box>
