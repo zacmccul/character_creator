@@ -13,19 +13,17 @@
     },
     {
       "id": "experience",
-      "label": "Experience/Background",
-      "description": "Character background experiences",
+      "label": "Star Sign",
+      "description": "Major constellation present during character's birth. No current mechanical implications.",
       "values": [
-        "Soldier",
-        "Scholar",
-        "Criminal",
-        "Noble",
-        "Acolyte",
-        "Folk Hero",
-        "Merchant",
-        "Entertainer",
-        "Outlander",
-        "Sailor"
+        "The Traveler",
+        "The Fury",
+        "The Keeper",
+        "The Excess",
+        "The Withering",
+        "The Mirage",
+        "Dead Stars",
+        "Starless Skies"
       ]
     },
     {
@@ -33,13 +31,13 @@
       "label": "Character Classes",
       "description": "Available character classes",
       "values": [
-        { "name": "Soldier", "desc": "Tactical combatant with battlefield expertise" },
-        { "name": "Duelist", "desc": "Precise fighter specializing in one-on-one combat" },
-        { "name": "Warrior", "desc": "Mighty combatant with raw physical power" },
-        { "name": "Medicant", "desc": "Healer and support specialist" },
-        { "name": "Engineer", "desc": "Master of devices and technological solutions" },
-        { "name": "Artiste", "desc": "Creative performer who channels magic through art" },
-        { "name": "Voidsman", "desc": "Manipulator of void energy and space" }
+        { "name": "Soldier", "desc": "Command your allies to victory and control Objectives with a combination of melee and ranged weapons." },
+        { "name": "Duelist", "desc": "Utilize dynamic special moves to remove single targets from combat. Wide array of equipment." },
+        { "name": "Warrior", "desc": "Protect allies and keep enemies from approaching. Very durable, and has access to high DMG equipment." },
+        { "name": "Medicant", "desc": "Primary healing class. Provides plenty of Consumables and Conditions." },
+        { "name": "Engineer", "desc": "Objective-controlling class that can flexibly cast spells." },
+        { "name": "Artiste", "desc": "Spellcasting class that can provide unique bonuses to allies out of turn order." },
+        { "name": "Voidsman", "desc": "High burst damage spellcaster with access to a unique arsenal of Equipment." }
       ]
     },
     {
@@ -59,12 +57,7 @@
         { "name": "Shield", "desc": "Defensive tool for blocking attacks" },
         { "name": "Light Armor", "desc": "Flexible protection with minimal encumbrance" },
         { "name": "Medium Armor", "desc": "Balanced protection and mobility" },
-        { "name": "Heavy Armor", "desc": "Maximum protection at the cost of mobility" },
-        "Backpack",
-        "Rope",
-        "Torch",
-        "Bedroll",
-        "Rations"
+        { "name": "Heavy Armor", "desc": "Maximum protection at the cost of mobility" }
       ]
     },
     {
