@@ -5,15 +5,10 @@
       "label": "Species",
       "description": "Available character species/races",
       "values": [
-        "Human",
-        "Elf",
-        "Dwarf",
-        "Halfling",
-        "Orc",
-        "Gnome",
-        "Tiefling",
-        "Dragonborn",
-        "Half-Elf"
+        "Ourlean",
+        "Gex",
+        "Rodensha",
+        "Hanoan",
       ]
     },
     {
@@ -38,19 +33,13 @@
       "label": "Character Classes",
       "description": "Available character classes",
       "values": [
-        "Fighter",
-        "Wizard",
-        "Rogue",
-        "Cleric",
-        "Ranger",
-        "Barbarian",
-        "Bard",
-        "Druid",
-        "Monk",
-        "Paladin",
-        "Sorcerer",
-        "Warlock",
-        "Artificer"
+        "Soldier",
+        "Duelist",
+        "Warrior",
+        "Medicant",
+        "Engineer",
+        "Artiste",
+        "Voidsman",
       ]
     },
     {
