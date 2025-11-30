@@ -28,9 +28,9 @@
       }
     },
     {
-      "id": "INT",
-      "label": "Intelligence",
-      "description": "Mental acuity. Determines experience bank slots.",
+      "id": "CON",
+      "label": "Constitution",
+      "description": "Physical Endurance. Affects Hit Points, Radioactive Control, and Death Save Dice.",
       "emoji": "🧠",
       "color": "blue",
       "schema": {
@@ -41,9 +41,9 @@
       }
     },
     {
-      "id": "WIS",
-      "label": "Wisdom",
-      "description": "Awareness and insight.",
+      "id": "INT",
+      "label": "Intelligence",
+      "description": "Mental Acuity. Affects maximum number of Experiences, and die rerolls on Saves.",
       "emoji": "🔮",
       "color": "purple",
       "schema": {
@@ -54,9 +54,9 @@
       }
     },
     {
-      "id": "CHA",
-      "label": "Charisma",
-      "description": "Force of personality and leadership.",
+      "id": "PER",
+      "label": "Perception",
+      "description": "Awareness of the world and self. Affects dice rerolls on attacks and skill rolls..",
       "emoji": "✨",
       "color": "pink",
       "schema": {
