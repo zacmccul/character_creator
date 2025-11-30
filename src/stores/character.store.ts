@@ -29,7 +29,7 @@ import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
 import { syncAttributesWithConfig, syncCombatStatsWithConfig, syncInventorySlotsWithConfig } from '@/utils/config-sync';
-import { getEnumById } from '@/utils/config-manager';
+import { getEnumById, configManager } from '@/utils/config-manager';
 
 // ============================================================================
 // Store Interface
@@ -444,12 +444,44 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     const validation = validateCharacterSheet(data);
     
     if (!validation.success) {
-      console.error('Invalid character data:', validation.error);
-      return;
+      console.debug('Character validation warnings (non-fatal):', validation.error.issues);
+      console.debug('Attempting to load character with validation warnings...');
+    }
+    
+    // Filter level entries to only include classes that exist in the config
+    let filteredData = { ...data };
+    
+    try {
+      // Try to get the class enum from config to validate level entries
+      if (configManager.isLoaded()) {
+        const config = configManager.getConfig();
+        const classEnum = getEnumById(config.levelClass.classEnum.enumId);
+        
+        if (classEnum) {
+          const validClasses = new Set(classEnum.values);
+          const originalLength = data.level.length;
+          
+          // Filter out classes that don't exist in config
+          filteredData.level = data.level.filter((entry) => {
+            const isValid = validClasses.has(entry.class);
+            if (!isValid) {
+              console.debug(`Filtering out invalid class from level data: "${entry.class}" (not in config)`);
+            }
+            return isValid;
+          });
+          
+          const filteredCount = originalLength - filteredData.level.length;
+          if (filteredCount > 0) {
+            console.debug(`Filtered ${filteredCount} invalid class entr${filteredCount === 1 ? 'y' : 'ies'} from level data`);
+          }
+        }
+      }
+    } catch (error) {
+      console.debug('Could not filter level classes (config may not be loaded yet):', error);
     }
     
     set({
-      character: data,
+      character: filteredData,
     });
   },
   

@@ -82,6 +82,7 @@ export const ResourceCounterSchema = z.object({
 
 /**
  * Complete character sheet schema
+ * Uses .passthrough() to allow unknown fields during migration from hard-coded to config-driven system
  */
 export const CharacterSheetSchema = z.object({
   version: z.string().regex(/^\d+\.\d+\.\d+$/, 'Version must be in semantic versioning format (e.g., 1.0.0)'),
@@ -98,7 +99,7 @@ export const CharacterSheetSchema = z.object({
   consumableSlots: z.array(ConsumableItemSchema).optional(), // DEPRECATED - kept for backward compatibility
   experienceBank: z.array(ExperienceBankItemSchema).optional(), // DEPRECATED - kept for backward compatibility
   resourceCounters: z.array(ResourceCounterSchema),
-}).refine(
+}).passthrough().refine(
   (data) => {
     // DEPRECATED validation - skip if not present, empty array, or if STR attribute doesn't exist
     if (!data.equipmentSlots || data.equipmentSlots.length === 0 || data.attributes.STR === undefined) return true;
