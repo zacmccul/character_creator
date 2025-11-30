@@ -36,24 +36,6 @@
       "itemEnumId": "equipment_items",
       "slotFormula": "INT + 2 * DEX - 1",
       "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
-    },
-    {
-      "id": "custom2",
-      "label": "Custom Configged",
-      "emoji": "⚙️",
-      "description": "Custom inventory tab defined in config",
-      "itemEnumId": "equipment_items",
-      "slotFormula": "INT + 10 * DEX - 1",
-      "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
-    },
-    {
-      "id": "custom3",
-      "label": "Custom Configged",
-      "emoji": "⚙️",
-      "description": "Custom inventory tab defined in config",
-      "itemEnumId": "equipment_items",
-      "slotFormula": "INT + 10 * DEX - 1",
-      "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
     }
   ]
 }
