@@ -7,7 +7,7 @@
       "emoji": "🛡️",
       "description": "Weapons, armor, and gear based on STR",
       "itemEnumId": "equipment_items",
-      "slotFormula": "STR",
+      "slotFormula": "2 + STR",
       "emptySlotMessage": "No equipment slots. Increase STR attribute to add slots."
     },
     {
@@ -16,7 +16,7 @@
       "emoji": "🧪",
       "description": "Potions, scrolls, and consumable items based on DEX",
       "itemEnumId": "consumable_items",
-      "slotFormula": "DEX",
+      "slotFormula": "2 + DEX",
       "emptySlotMessage": "No consumable slots. Increase DEX attribute to add slots."
     },
     {
@@ -25,7 +25,7 @@
       "emoji": "📚",
       "description": "Knowledge, skills, and training based on INT",
       "itemEnumId": "experience_bank_items",
-      "slotFormula": "INT",
+      "slotFormula": "1 + INT",
       "emptySlotMessage": "No experience bank slots. Increase INT attribute to add slots."
     },
     {
