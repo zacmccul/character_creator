@@ -1,0 +1,90 @@
+{
+  "title": "⚔️ Combat Stats",
+  "stats": [
+    {
+      "id": "hp",
+      "label": "HP",
+      "description": "Hit Points - Character's health",
+      "emoji": "❤️",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "mp",
+      "label": "MP",
+      "description": "Mana Points - Resource for spells and abilities",
+      "emoji": "✨",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 0
+      }
+    },
+    {
+      "id": "movementRange",
+      "label": "Move",
+      "description": "Movement range per turn",
+      "emoji": "🏃",
+      "schema": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 5
+      }
+    },
+    {
+      "id": "abilityBonus",
+      "label": "Ability",
+      "description": "Bonus to ability checks and saves",
+      "emoji": "🎯",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "attackPower",
+      "label": "Attack",
+      "description": "Physical attack damage bonus",
+      "emoji": "⚡",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "spellPower",
+      "label": "Spell",
+      "description": "Spell damage and healing bonus",
+      "emoji": "🔮",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "range",
+      "label": "Range",
+      "description": "Attack and spell range distance",
+      "emoji": "🎯",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 5
+      }
+    },
+    {
+      "id": "magicAbility",
+      "label": "Magic",
+      "description": "Innate magical ability and resistance",
+      "emoji": "🪄",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10,
+        "default": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "name": "Single Column Layout",
+  "description": "Simple vertical single-column layout with all components stacked vertically. Ideal for mobile or narrow displays.",
+  "columns": [
+    {
+      "width": { "base": "1fr" },
+      "label": "Main Column"
+    }
+  ],
+  "columnGap": 0,
+  "itemGap": 4,
+  "items": [
+    {
+      "componentId": "character-info",
+      "column": 0,
+      "minH": "auto"
+    },
+    {
+      "componentId": "attributes",
+      "column": 0,
+      "minH": "200px"
+    },
+    {
+      "componentId": "combat-stats",
+      "column": 0,
+      "minH": "auto"
+    },
+    {
+      "componentId": "level-class",
+      "column": 0,
+      "minH": "auto"
+    },
+    {
+      "componentId": "inventory",
+      "column": 0,
+      "minH": "200px"
+    },
+    {
+      "componentId": "resource-counters",
+      "column": 0,
+      "minH": "150px"
+    }
+  ],
+  "container": {
+    "maxW": "container.md",
+    "px": 4,
+    "py": { "base": 6, "sm": 8 }
+  }
+}

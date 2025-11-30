@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:wasm": "cd wasm && wasm-pack build --target web --out-dir ../src/utilities/wasm-pkg",
+    "build:examples": "tsx scripts/build-examples.ts",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:watch": "vitest",

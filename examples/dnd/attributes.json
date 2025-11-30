@@ -1,0 +1,83 @@
+{
+  "title": "⚔️ Ability Scores",
+  "attributes": [
+    {
+      "id": "STR",
+      "label": "Strength",
+      "description": "Physical power and athletic ability. Affects melee attacks and carrying capacity.",
+      "emoji": "💪",
+      "color": "red",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    },
+    {
+      "id": "DEX",
+      "label": "Dexterity",
+      "description": "Agility, reflexes, and balance. Affects AC, initiative, and ranged attacks.",
+      "emoji": "⚡",
+      "color": "green",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    },
+    {
+      "id": "CON",
+      "label": "Constitution",
+      "description": "Health, stamina, and vital force. Affects hit points and concentration.",
+      "emoji": "❤️",
+      "color": "orange",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    },
+    {
+      "id": "INT",
+      "label": "Intelligence",
+      "description": "Reasoning and memory. Affects investigation and arcane knowledge.",
+      "emoji": "🧠",
+      "color": "blue",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    },
+    {
+      "id": "WIS",
+      "label": "Wisdom",
+      "description": "Awareness and insight. Affects perception and divine magic.",
+      "emoji": "🔮",
+      "color": "purple",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    },
+    {
+      "id": "CHA",
+      "label": "Charisma",
+      "description": "Force of personality and leadership. Affects persuasion and deception.",
+      "emoji": "✨",
+      "color": "pink",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 10
+      }
+    }
+  ]
+}

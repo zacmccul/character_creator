@@ -1,0 +1,75 @@
+{
+  "title": "👤 Character Information",
+  "fields": [
+    {
+      "id": "name",
+      "type": "text",
+      "label": "Character Name",
+      "placeholder": "Enter character name",
+      "required": true,
+      "description": "Your character's name"
+    },
+    {
+      "id": "player_name",
+      "type": "text",
+      "label": "Player Name",
+      "placeholder": "Enter your name",
+      "description": "The name of the player"
+    },
+    {
+      "id": "character_species",
+      "type": "enum",
+      "label": "Race",
+      "enumRef": {
+        "enumId": "species"
+      },
+      "description": "Your character's race"
+    },
+    {
+      "id": "character_experience",
+      "type": "enum",
+      "label": "Background",
+      "enumRef": {
+        "enumId": "experience"
+      },
+      "description": "Your character's background"
+    },
+    {
+      "id": "character_alignment",
+      "type": "enum",
+      "label": "Alignment",
+      "enumRef": {
+        "enumId": "alignment"
+      },
+      "description": "Your character's moral and ethical alignment"
+    },
+    {
+      "id": "personality_traits",
+      "type": "text",
+      "label": "Personality Traits",
+      "placeholder": "Describe your character's personality traits...",
+      "description": "Your character's personality traits and mannerisms"
+    },
+    {
+      "id": "ideals",
+      "type": "text",
+      "label": "Ideals",
+      "placeholder": "What does your character believe in?",
+      "description": "Your character's values and beliefs"
+    },
+    {
+      "id": "bonds",
+      "type": "text",
+      "label": "Bonds",
+      "placeholder": "What connects your character to the world?",
+      "description": "Your character's connections to people, places, or events"
+    },
+    {
+      "id": "flaws",
+      "type": "text",
+      "label": "Flaws",
+      "placeholder": "What are your character's weaknesses?",
+      "description": "Your character's flaws and vulnerabilities"
+    }
+  ]
+}

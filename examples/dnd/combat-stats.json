@@ -1,0 +1,94 @@
+{
+  "title": "⚔️ Combat Statistics",
+  "stats": [
+    {
+      "id": "hp",
+      "label": "Hit Points",
+      "description": "Current and maximum hit points",
+      "emoji": "❤️",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 10
+      }
+    },
+    {
+      "id": "maxHp",
+      "label": "Max HP",
+      "description": "Maximum hit points",
+      "emoji": "💚",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 10
+      }
+    },
+    {
+      "id": "armorClass",
+      "label": "AC",
+      "description": "Armor Class - How hard you are to hit",
+      "emoji": "🛡️",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 10
+      }
+    },
+    {
+      "id": "initiative",
+      "label": "Initiative",
+      "description": "Initiative bonus for combat order",
+      "emoji": "⚡",
+      "schema": {
+        "type": "integer",
+        "default": 0
+      }
+    },
+    {
+      "id": "speed",
+      "label": "Speed",
+      "description": "Movement speed in feet",
+      "emoji": "🏃",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 30
+      }
+    },
+    {
+      "id": "proficiencyBonus",
+      "label": "Proficiency",
+      "description": "Proficiency bonus",
+      "emoji": "⭐",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 2
+      }
+    },
+    {
+      "id": "deathSaveSuccesses",
+      "label": "Death Saves ✓",
+      "description": "Death save successes",
+      "emoji": "✅",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 3,
+        "default": 0
+      }
+    },
+    {
+      "id": "deathSaveFailures",
+      "label": "Death Saves ✗",
+      "description": "Death save failures",
+      "emoji": "❌",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 3,
+        "default": 0
+      }
+    }
+  ]
+}

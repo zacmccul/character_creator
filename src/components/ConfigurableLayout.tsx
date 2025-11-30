@@ -13,6 +13,7 @@ import { ResourceCounters } from '@/components/ResourceCounters';
 import { InventorySection } from '@/components/InventorySection';
 import type { LayoutConfig, ComponentId, LayoutComponentItem } from '@/types/layout-config.types';
 import { layoutConfigSchema } from '@/schemas/layout-config.schema';
+import { configs } from '@/config';
 
 /**
  * Map of component IDs to their React components
@@ -65,7 +66,7 @@ export const ConfigurableLayout = ({ config: propConfig, onError }: Configurable
   const [isLoading, setIsLoading] = useState(!propConfig);
   const [error, setError] = useState<string | null>(null);
 
-  // Load layout config from JSON if not provided via props
+  // Load layout config from imported module if not provided via props
   useEffect(() => {
     if (propConfig) {
       setLayoutConfig(propConfig);
@@ -76,13 +77,9 @@ export const ConfigurableLayout = ({ config: propConfig, onError }: Configurable
     const loadLayoutConfig = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/config/layout.json');
         
-        if (!response.ok) {
-          throw new Error(`Failed to load layout config: ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        // Use imported config instead of fetching
+        const data = configs.layout;
         
         // Validate against schema
         const result = layoutConfigSchema.safeParse(data);
@@ -165,10 +162,8 @@ export const useLayoutConfig = () => {
   useEffect(() => {
     const loadConfig = async () => {
       try {
-        const response = await fetch('/config/layout.json');
-        if (!response.ok) throw new Error('Failed to load layout config');
-        
-        const data = await response.json();
+        // Use imported config instead of fetching
+        const data = configs.layout;
         const result = layoutConfigSchema.safeParse(data);
         
         if (!result.success) {

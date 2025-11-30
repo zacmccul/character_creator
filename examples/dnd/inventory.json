@@ -1,0 +1,23 @@
+{
+  "title": "🎒 Inventory",
+  "tabs": [
+    {
+      "id": "equipment",
+      "label": "Equipment",
+      "emoji": "⚔️",
+      "description": "Weapons, armor, and adventuring gear (10 slots)",
+      "itemEnumId": "equipment_items",
+      "slotFormula": "10",
+      "emptySlotMessage": "You have 10 equipment slots."
+    },
+    {
+      "id": "consumables",
+      "label": "Consumables",
+      "emoji": "🧪",
+      "description": "Potions, scrolls, and single-use items",
+      "itemEnumId": "consumable_items",
+      "slotFormula": "10",
+      "emptySlotMessage": "You have 10 consumable slots."
+    }
+  ]
+}

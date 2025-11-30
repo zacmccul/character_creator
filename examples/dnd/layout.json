@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "name": "D&D Classic Layout",
+  "description": "Traditional D&D character sheet layout with ability scores on the left and character details on the right",
+  "columns": [
+    {
+      "width": { "base": "1fr", "lg": "400px", "xl": "450px" },
+      "label": "Left Column - Abilities & Combat"
+    },
+    {
+      "width": { "base": "1fr", "lg": "1fr" },
+      "label": "Right Column - Character Details"
+    }
+  ],
+  "columnGap": 6,
+  "itemGap": 4,
+  "items": [
+    {
+      "componentId": "attributes",
+      "column": 0,
+      "minH": "200px"
+    },
+    {
+      "componentId": "combat-stats",
+      "column": 0,
+      "minH": "auto"
+    },
+    {
+      "componentId": "resource-counters",
+      "column": 0,
+      "minH": "150px"
+    },
+    {
+      "componentId": "character-info",
+      "column": 1,
+      "minH": "auto"
+    },
+    {
+      "componentId": "level-class",
+      "column": 1,
+      "minH": "auto"
+    },
+    {
+      "componentId": "inventory",
+      "column": 1,
+      "minH": "200px"
+    }
+  ],
+  "container": {
+    "maxW": "container.xl",
+    "px": 4,
+    "py": 6
+  }
+}

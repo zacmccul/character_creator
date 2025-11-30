@@ -16,6 +16,7 @@ import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
 import type { LevelClassConfig } from '@/types/level-class-config.types';
 import { ZodError } from 'zod';
+import { configs } from '@/config';
 
 /**
  * Configuration validation error with detailed information
@@ -83,10 +84,10 @@ class ConfigManager {
     let inventory: InventoryConfig | null = null;
     let levelClass: LevelClassConfig | null = null;
 
-    // Load attributes configuration
+    // Load attributes configuration from imported module
     try {
-      attributes = await this.loadConfig<AttributesConfig>(
-        '/config/attributes.json',
+      attributes = await this.validateConfig<AttributesConfig>(
+        configs.attributes,
         AttributesConfigSchema,
         'attributes'
       );
@@ -94,10 +95,10 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'attributes'));
     }
 
-    // Load enums configuration
+    // Load enums configuration from imported module
     try {
-      enums = await this.loadConfig<EnumsConfig>(
-        '/config/enums.json',
+      enums = await this.validateConfig<EnumsConfig>(
+        configs.enums,
         EnumsConfigSchema,
         'enums'
       );
@@ -105,10 +106,10 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'enums'));
     }
 
-    // Load character info configuration
+    // Load character info configuration from imported module
     try {
-      characterInfo = await this.loadConfig<CharacterInfoConfig>(
-        '/config/character-info.json',
+      characterInfo = await this.validateConfig<CharacterInfoConfig>(
+        configs.characterInfo,
         CharacterInfoConfigSchema,
         'characterInfo'
       );
@@ -116,10 +117,10 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'characterInfo'));
     }
 
-    // Load combat stats configuration
+    // Load combat stats configuration from imported module
     try {
-      combatStats = await this.loadConfig<CombatStatsConfig>(
-        '/config/combat-stats.json',
+      combatStats = await this.validateConfig<CombatStatsConfig>(
+        configs.combatStats,
         CombatStatsConfigSchema,
         'combatStats'
       );
@@ -127,10 +128,10 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'combatStats'));
     }
 
-    // Load inventory configuration
+    // Load inventory configuration from imported module
     try {
-      inventory = await this.loadConfig<InventoryConfig>(
-        '/config/inventory.json',
+      inventory = await this.validateConfig<InventoryConfig>(
+        configs.inventory,
         InventoryConfigSchema,
         'inventory'
       );
@@ -138,10 +139,10 @@ class ConfigManager {
       errors.push(...this.extractErrors(error, 'inventory'));
     }
 
-    // Load level class configuration
+    // Load level class configuration from imported module
     try {
-      levelClass = await this.loadConfig<LevelClassConfig>(
-        '/config/level-class.json',
+      levelClass = await this.validateConfig<LevelClassConfig>(
+        configs.levelClass,
         LevelClassConfigSchema,
         'levelClass'
       );
@@ -185,23 +186,14 @@ class ConfigManager {
   }
 
   /**
-   * Load and validate a single configuration file
+   * Validate a configuration object against a schema
    */
-  private async loadConfig<T>(
-    path: string,
+  private async validateConfig<T>(
+    data: any,
     schema: any,
-    configName: string
+    _configName: string
   ): Promise<T> {
-    const response = await fetch(path);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to load ${configName}: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const json = await response.json();
-    const result = schema.safeParse(json);
+    const result = schema.safeParse(data);
 
     if (!result.success) {
       throw result.error;

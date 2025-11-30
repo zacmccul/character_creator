@@ -1,0 +1,59 @@
+{
+  "title": "🎒 Inventory",
+  "tabs": [
+    {
+      "id": "equipment",
+      "label": "Equipment",
+      "emoji": "🛡️",
+      "description": "Weapons, armor, and gear based on STR",
+      "itemEnumId": "equipment_items",
+      "slotFormula": "STR",
+      "emptySlotMessage": "No equipment slots. Increase STR attribute to add slots."
+    },
+    {
+      "id": "consumables",
+      "label": "Consumables",
+      "emoji": "🧪",
+      "description": "Potions, scrolls, and consumable items based on DEX",
+      "itemEnumId": "consumable_items",
+      "slotFormula": "DEX",
+      "emptySlotMessage": "No consumable slots. Increase DEX attribute to add slots."
+    },
+    {
+      "id": "experience_bank",
+      "label": "Experience",
+      "emoji": "📚",
+      "description": "Knowledge, skills, and training based on INT",
+      "itemEnumId": "experience_bank_items",
+      "slotFormula": "INT",
+      "emptySlotMessage": "No experience bank slots. Increase INT attribute to add slots."
+    },
+    {
+      "id": "custom",
+      "label": "Custom Configged",
+      "emoji": "⚙️",
+      "description": "Custom inventory tab defined in config",
+      "itemEnumId": "equipment_items",
+      "slotFormula": "INT + 2 * DEX - 1",
+      "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
+    },
+    {
+      "id": "custom2",
+      "label": "Custom Configged",
+      "emoji": "⚙️",
+      "description": "Custom inventory tab defined in config",
+      "itemEnumId": "equipment_items",
+      "slotFormula": "INT + 10 * DEX - 1",
+      "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
+    },
+    {
+      "id": "custom3",
+      "label": "Custom Configged",
+      "emoji": "⚙️",
+      "description": "Custom inventory tab defined in config",
+      "itemEnumId": "equipment_items",
+      "slotFormula": "INT + 10 * DEX - 1",
+      "emptySlotMessage": "No custom slots. Adjust attributes to add slots."
+    }
+  ]
+}

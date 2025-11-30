@@ -1,0 +1,125 @@
+{
+  "enums": [
+    {
+      "id": "species",
+      "label": "Race",
+      "description": "Available D&D player races",
+      "values": [
+        "Human",
+        "Elf",
+        "Dwarf",
+        "Halfling",
+        "Dragonborn",
+        "Gnome",
+        "Half-Elf",
+        "Half-Orc",
+        "Tiefling"
+      ]
+    },
+    {
+      "id": "experience",
+      "label": "Background",
+      "description": "Character background and origins",
+      "values": [
+        "Acolyte",
+        "Charlatan",
+        "Criminal",
+        "Entertainer",
+        "Folk Hero",
+        "Guild Artisan",
+        "Hermit",
+        "Noble",
+        "Outlander",
+        "Sage",
+        "Sailor",
+        "Soldier",
+        "Urchin"
+      ]
+    },
+    {
+      "id": "classes",
+      "label": "Character Classes",
+      "description": "Available D&D classes",
+      "values": [
+        "Barbarian",
+        "Bard",
+        "Cleric",
+        "Druid",
+        "Fighter",
+        "Monk",
+        "Paladin",
+        "Ranger",
+        "Rogue",
+        "Sorcerer",
+        "Warlock",
+        "Wizard"
+      ]
+    },
+    {
+      "id": "alignment",
+      "label": "Alignment",
+      "description": "Moral and ethical alignment",
+      "values": [
+        "Lawful Good",
+        "Neutral Good",
+        "Chaotic Good",
+        "Lawful Neutral",
+        "True Neutral",
+        "Chaotic Neutral",
+        "Lawful Evil",
+        "Neutral Evil",
+        "Chaotic Evil"
+      ]
+    },
+    {
+      "id": "equipment_items",
+      "label": "Equipment",
+      "description": "Weapons, armor, and gear",
+      "values": [
+        "None",
+        "Longsword",
+        "Shortsword",
+        "Greatsword",
+        "Battleaxe",
+        "Warhammer",
+        "Mace",
+        "Dagger",
+        "Rapier",
+        "Longbow",
+        "Shortbow",
+        "Crossbow (Light)",
+        "Crossbow (Heavy)",
+        "Leather Armor",
+        "Studded Leather",
+        "Chain Mail",
+        "Scale Mail",
+        "Plate Armor",
+        "Shield",
+        "Backpack",
+        "Bedroll",
+        "Rope (50 ft)",
+        "Torch",
+        "Rations (1 day)"
+      ]
+    },
+    {
+      "id": "consumable_items",
+      "label": "Consumables",
+      "description": "Potions, scrolls, and single-use items",
+      "values": [
+        "None",
+        "Potion of Healing",
+        "Potion of Greater Healing",
+        "Potion of Superior Healing",
+        "Potion of Invisibility",
+        "Antitoxin",
+        "Holy Water",
+        "Alchemist's Fire",
+        "Scroll of Identify",
+        "Scroll of Magic Missile",
+        "Scroll of Fireball",
+        "Scroll of Cure Wounds"
+    ]
+  }
+]
+}

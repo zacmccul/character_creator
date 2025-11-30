@@ -1,0 +1,118 @@
+{
+  "enums": [
+    {
+      "id": "species",
+      "label": "Species",
+      "description": "Available character species/races",
+      "values": [
+        "Human",
+        "Elf",
+        "Dwarf",
+        "Halfling",
+        "Orc",
+        "Gnome",
+        "Tiefling",
+        "Dragonborn",
+        "Half-Elf"
+      ]
+    },
+    {
+      "id": "experience",
+      "label": "Experience/Background",
+      "description": "Character background experiences",
+      "values": [
+        "Soldier",
+        "Scholar",
+        "Criminal",
+        "Noble",
+        "Acolyte",
+        "Folk Hero",
+        "Merchant",
+        "Entertainer",
+        "Outlander",
+        "Sailor"
+      ]
+    },
+    {
+      "id": "classes",
+      "label": "Character Classes",
+      "description": "Available character classes",
+      "values": [
+        "Fighter",
+        "Wizard",
+        "Rogue",
+        "Cleric",
+        "Ranger",
+        "Barbarian",
+        "Bard",
+        "Druid",
+        "Monk",
+        "Paladin",
+        "Sorcerer",
+        "Warlock",
+        "Artificer"
+      ]
+    },
+    {
+      "id": "equipment_items",
+      "label": "Equipment Items",
+      "description": "Available equipment items",
+      "values": [
+        "None",
+        "Longsword",
+        "Shortsword",
+        "Greatsword",
+        "Dagger",
+        "Bow",
+        "Crossbow",
+        "Staff",
+        "Wand",
+        "Shield",
+        "Light Armor",
+        "Medium Armor",
+        "Heavy Armor",
+        "Backpack",
+        "Rope",
+        "Torch",
+        "Bedroll",
+        "Rations"
+      ]
+    },
+    {
+      "id": "consumable_items",
+      "label": "Consumable Items",
+      "description": "Available consumable items",
+      "values": [
+        "None",
+        "Health Potion",
+        "Mana Potion",
+        "Antidote",
+        "Elixir",
+        "Scroll",
+        "Bomb",
+        "Poison",
+        "Food",
+        "Water",
+        "Bandages"
+      ]
+    },
+    {
+      "id": "experience_bank_items",
+      "label": "Experience Bank Items",
+      "description": "Memories, knowledge, and training",
+      "values": [
+        "None",
+        "Combat Training",
+        "Arcane Knowledge",
+        "Survival Skills",
+        "Diplomatic Experience",
+        "Crafting Expertise",
+        "Lore",
+        "Language",
+        "Trade Skill",
+        "Ritual",
+        "Technique"
+      ]
+    }
+  ]
+}

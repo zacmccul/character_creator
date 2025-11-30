@@ -1,0 +1,38 @@
+{
+  "title": "👤 Character Information",
+  "fields": [
+    {
+      "id": "name",
+      "type": "text",
+      "label": "Name",
+      "placeholder": "Enter name",
+      "required": true,
+      "description": "Your character's name"
+    },
+    {
+      "id": "character_species",
+      "type": "enum",
+      "label": "Species",
+      "enumRef": {
+        "enumId": "species"
+      },
+      "description": "Your character's species or race"
+    },
+    {
+      "id": "character_experience",
+      "type": "enum",
+      "label": "Background",
+      "enumRef": {
+        "enumId": "experience"
+      },
+      "description": "Your character's background experience"
+    },
+    {
+      "id": "player_name",
+      "type": "text",
+      "label": "Player Name",
+      "placeholder": "Enter your name",
+      "description": "The name of the player controlling this character"
+    }
+  ]
+}

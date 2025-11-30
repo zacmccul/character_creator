@@ -1,0 +1,70 @@
+{
+  "title": "🎲 Attributes",
+  "attributes": [
+    {
+      "id": "STR",
+      "label": "Strength",
+      "description": "Physical power. Determines equipment slots.",
+      "emoji": "💪",
+      "color": "red",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "default": 0
+      }
+    },
+    {
+      "id": "DEX",
+      "label": "Dexterity",
+      "description": "Agility and reflexes. Determines consumable slots.",
+      "emoji": "⚡",
+      "color": "green",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "default": 0
+      }
+    },
+    {
+      "id": "INT",
+      "label": "Intelligence",
+      "description": "Mental acuity. Determines experience bank slots.",
+      "emoji": "🧠",
+      "color": "blue",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "default": 0
+      }
+    },
+    {
+      "id": "WIS",
+      "label": "Wisdom",
+      "description": "Awareness and insight.",
+      "emoji": "🔮",
+      "color": "purple",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "default": 0
+      }
+    },
+    {
+      "id": "CHA",
+      "label": "Charisma",
+      "description": "Force of personality and leadership.",
+      "emoji": "✨",
+      "color": "pink",
+      "schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "default": 0
+      }
+    }
+  ]
+}

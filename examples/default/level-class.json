@@ -1,0 +1,16 @@
+{
+  "title": "🎭 Classes & Levels",
+  "description": "Manage your character's classes and levels with multiclass support",
+  "classEnum": {
+    "enumId": "classes"
+  },
+  "levelField": {
+    "label": "Level",
+    "min": 1,
+    "max": 20,
+    "default": 1
+  },
+  "addButtonText": "Add Class",
+  "emptyStateText": "No classes added yet. Click \"Add Class\" to begin.",
+  "multiclassInfoTemplate": "💡 **Multiclassing:** You have {count} classes for a total level of **{total}**."
+}
