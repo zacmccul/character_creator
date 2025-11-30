@@ -5,10 +5,10 @@
       "label": "Species",
       "description": "Available character species/races",
       "values": [
-        { "name": "Ourlean", "desc": "Versatile and adaptable humanoids" },
-        { "name": "Gex", "desc": "Reptilian beings with natural camouflage" },
-        { "name": "Rodensha", "desc": "Quick and resourceful small folk" },
-        { "name": "Hanoan", "desc": "Noble warriors with strong traditions" }
+        { "name": "Ourlean", "desc": "Technical Know-How: When you use a piece of Equipment or Consumable that features the Reactor trait, if you are not Proficient in that item, your base Success Range for it is a 4+." },
+        { "name": "Gex", "desc": "Camouflage 1AP: Until the start of your next turn, you do not count as a Valid Target for Spells and Attacks. Afterward, this action costs 1 more AP to use until the start of your next Expedition. This effect stacks." },
+        { "name": "Rodensha", "desc": "Scurry-Away: When you successfully hit a creature with a Critical Hit, the next Fall-Back Action you perform costs 1 AP until the end of your turn. This is reduced to 0 AP instead if you landed a Critical Hit during a Strike Action." },
+        { "name": "Hanoan", "desc": "Starlight Inheritance: Select one Spell from any Tier 1 Category. You gain access to that spell, and can cast it once while ignoring its Radioactive Control Cost. You regain the ability to cast this spell this way when you consume a Rest Charge." }
       ]
     },
     {
