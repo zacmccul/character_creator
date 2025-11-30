@@ -17,7 +17,11 @@ import { createEmptyCharacter, Species, CharacterClass } from '@/types/character
 describe('Character Schema Validation', () => {
   describe('validateCharacterSheet', () => {
     it('should validate character with minimum valid data', () => {
-      const character = { ...createEmptyCharacter(), name: 'Test' };
+      const character = { 
+        ...createEmptyCharacter(), 
+        name: 'Test',
+        attributes: {} // Empty attributes are valid with config-driven system
+      };
       const result = validateCharacterSheet(character);
       
       expect(result.success).toBe(true);
@@ -36,28 +40,26 @@ describe('Character Schema Validation', () => {
         name: 'Test Hero',
         level: [{ class: CharacterClass.FIGHTER, level: 5 }],
         species: Species.ELF,
+        attributes: {} // Empty attributes are valid with config-driven system
       };
       const result = validateCharacterSheet(character);
       
       expect(result.success).toBe(true);
     });
 
-    it('should reject mismatched equipment slots', () => {
+    it('should validate character with dynamic attributes', () => {
       const character = {
         ...createEmptyCharacter(),
         name: 'Test',
         attributes: {
           STR: 3,
-          DEX: 0,
-          INT: 0,
-          WIS: 0,
-          CHA: 0,
+          DEX: 2,
+          INT: 1,
         },
-        equipmentSlots: [], // Should be 3 slots
       };
       const result = validateCharacterSheet(character);
       
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
   });
 

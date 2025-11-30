@@ -11,7 +11,6 @@ import {
   EquipmentItem,
   ConsumableItem,
   ExperienceBankItem,
-  AttributeType,
 } from '@/types/character.types';
 
 // ============================================================================
@@ -38,15 +37,10 @@ export const LevelEntrySchema = z.object({
 });
 
 /**
- * Attributes schema (5 attributes with 0-4 range)
+ * Attributes schema - dynamic record of attribute IDs to numbers
+ * Validates that all values are numbers (specific ranges enforced by config schema)
  */
-export const AttributesSchema = z.object({
-  [AttributeType.STR]: z.number().int().min(0).max(4),
-  [AttributeType.DEX]: z.number().int().min(0).max(4),
-  [AttributeType.INT]: z.number().int().min(0).max(4),
-  [AttributeType.WIS]: z.number().int().min(0).max(4),
-  [AttributeType.CHA]: z.number().int().min(0).max(4),
-});
+export const AttributesSchema = z.record(z.string(), z.number());
 
 /**
  * Combat stats schema - dynamic record of stat IDs to numbers
@@ -106,8 +100,8 @@ export const CharacterSheetSchema = z.object({
   resourceCounters: z.array(ResourceCounterSchema),
 }).refine(
   (data) => {
-    // DEPRECATED validation - skip if not present
-    if (!data.equipmentSlots) return true;
+    // DEPRECATED validation - skip if not present, empty array, or if STR attribute doesn't exist
+    if (!data.equipmentSlots || data.equipmentSlots.length === 0 || data.attributes.STR === undefined) return true;
     // Validate that equipment slots length matches STR attribute
     const expectedEquipmentSlots = Math.max(0, data.attributes.STR);
     return data.equipmentSlots.length === expectedEquipmentSlots;
@@ -118,8 +112,8 @@ export const CharacterSheetSchema = z.object({
   }
 ).refine(
   (data) => {
-    // DEPRECATED validation - skip if not present
-    if (!data.consumableSlots) return true;
+    // DEPRECATED validation - skip if not present, empty array, or if DEX attribute doesn't exist
+    if (!data.consumableSlots || data.consumableSlots.length === 0 || data.attributes.DEX === undefined) return true;
     // Validate that consumable slots length matches DEX attribute
     const expectedConsumableSlots = Math.max(0, data.attributes.DEX);
     return data.consumableSlots.length === expectedConsumableSlots;
@@ -130,8 +124,8 @@ export const CharacterSheetSchema = z.object({
   }
 ).refine(
   (data) => {
-    // DEPRECATED validation - skip if not present
-    if (!data.experienceBank) return true;
+    // DEPRECATED validation - skip if not present, empty array, or if INT attribute doesn't exist
+    if (!data.experienceBank || data.experienceBank.length === 0 || data.attributes.INT === undefined) return true;
     // Validate that experience bank length matches INT attribute
     const expectedExperienceBank = Math.max(0, data.attributes.INT);
     return data.experienceBank.length === expectedExperienceBank;

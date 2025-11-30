@@ -114,15 +114,10 @@ export enum ExperienceBankItem {
 }
 
 /**
- * The five core attributes (0-4 scale)
+ * Attribute type - dynamic string keys from configuration
+ * No longer an enum to support fully configuration-driven attributes
  */
-export enum AttributeType {
-  STR = 'STR', // Strength - affects Equipment Slots
-  DEX = 'DEX', // Dexterity - affects Consumable Slots
-  INT = 'INT', // Intelligence - affects Experience Bank
-  WIS = 'WIS', // Wisdom
-  CHA = 'CHA', // Charisma
-}
+export type AttributeType = string;
 
 // ============================================================================
 // Interfaces
@@ -137,15 +132,10 @@ export interface LevelEntry {
 }
 
 /**
- * Character attributes (5 attributes with 0-4 range)
+ * Character attributes - dynamic record of attribute IDs to numbers
+ * Attributes are fully configuration-driven
  */
-export interface Attributes {
-  readonly [AttributeType.STR]: number; // 0-4
-  readonly [AttributeType.DEX]: number; // 0-4
-  readonly [AttributeType.INT]: number; // 0-4
-  readonly [AttributeType.WIS]: number; // 0-4
-  readonly [AttributeType.CHA]: number; // 0-4
-}
+export type Attributes = Record<string, number>;
 
 /**
  * Combat statistics - dynamic record loaded from configuration
@@ -221,11 +211,7 @@ export const createEmptyCharacter = (): CharacterSheet => ({
   species: Species.HUMAN, // DEPRECATED
   experience: Experience.FOLK_HERO, // DEPRECATED
   attributes: {
-    [AttributeType.STR]: 0,
-    [AttributeType.DEX]: 0,
-    [AttributeType.INT]: 0,
-    [AttributeType.WIS]: 0,
-    [AttributeType.CHA]: 0,
+    // Attributes will be populated from config on first load
   },
   combatStats: {
     // Default stats - will be populated from config on first load

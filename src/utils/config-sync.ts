@@ -8,7 +8,6 @@ import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
-import { AttributeType } from '@/types/character.types';
 import { evaluateFormula } from './formula-evaluator';
 
 /**
@@ -46,9 +45,8 @@ export const syncAttributesWithConfig = (
 
   // Iterate through config attributes and populate synced object
   for (const attrConfig of config.attributes) {
-    const attrKey = attrConfig.id as AttributeType;
     // Use existing value if present, otherwise use default from schema
-    syncedAttributes[attrKey] = currentAttributes[attrKey] ?? (attrConfig.schema.default ?? 0);
+    syncedAttributes[attrConfig.id] = currentAttributes[attrConfig.id] ?? (attrConfig.schema.default ?? 0);
   }
 
   return syncedAttributes as unknown as Attributes;

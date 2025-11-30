@@ -12,7 +12,6 @@ import type {
   Species,
   CharacterClass,
   Experience,
-  AttributeType,
 } from '@/types/character.types';
 import {
   EquipmentItem,
@@ -64,7 +63,7 @@ interface CharacterState {
   updateRange: (value: number) => void;
   
   // Actions - Attribute updates
-  updateAttribute: (attribute: AttributeType, value: number) => void;
+  updateAttribute: (attribute: string, value: number) => void;
   
   // Actions - Level/Class management
   addLevel: (characterClass: CharacterClass) => void;

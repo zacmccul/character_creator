@@ -8,7 +8,6 @@ import { Box, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { Field } from '@/components/ui/field';
 import { useCharacterStore } from '@/stores/character.store';
-import { AttributeType } from '@/types/character.types';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
 import { configManager } from '@/utils/config-manager';
@@ -48,10 +47,7 @@ export const AttributesSection = () => {
 
     // Validate against schema constraints
     if (validateAttributeValue(attrConfig, numValue)) {
-      // Convert config ID to AttributeType enum
-      if (attrId in AttributeType) {
-        updateAttribute(attrId as AttributeType, numValue);
-      }
+      updateAttribute(attrId, numValue);
     }
   };
 
@@ -92,8 +88,7 @@ export const AttributesSection = () => {
           <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
           <Grid gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>
             {config.attributes.map((attrConfig) => {
-              const attributeKey = attrConfig.id as AttributeType;
-              const value = character.attributes[attributeKey] ?? 0;
+              const value = character.attributes[attrConfig.id] ?? 0;
               const bounds = getAttributeBounds(attrConfig);
 
               return (

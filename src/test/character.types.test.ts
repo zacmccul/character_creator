@@ -27,14 +27,12 @@ describe('Character Types', () => {
       expect(character.resourceCounters).toEqual([]);
     });
 
-    it('should have all attributes initialized to 0', () => {
+    it('should have attributes object initialized', () => {
       const character = createEmptyCharacter();
       
-      expect(character.attributes.STR).toBe(0);
-      expect(character.attributes.DEX).toBe(0);
-      expect(character.attributes.INT).toBe(0);
-      expect(character.attributes.WIS).toBe(0);
-      expect(character.attributes.CHA).toBe(0);
+      expect(character.attributes).toBeDefined();
+      expect(typeof character.attributes).toBe('object');
+      // Attributes are now config-driven and populated on load
     });
 
     it('should have combat stats record initialized', () => {
