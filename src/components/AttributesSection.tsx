@@ -87,14 +87,10 @@ export const AttributesSection = () => {
 
   return (
     <Card.Root>
-      <Card.Header>
-        <Flex align="center" gap={2}>
-          <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
-        </Flex>
-      </Card.Header>
       <Card.Body>
-        <Flex direction="column" gap={6}>
-          <Grid gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(5, 1fr)' }} gap={4}>
+        <Flex direction="column" gap={4}>
+          <Text fontSize="lg" fontWeight="semibold">{config.title}</Text>
+          <Grid gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>
             {config.attributes.map((attrConfig) => {
               const attributeKey = attrConfig.id as AttributeType;
               const value = character.attributes[attributeKey] ?? 0;
