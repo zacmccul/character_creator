@@ -27,6 +27,7 @@
         }
       }
     ],
+   [
     {
       "id": "mp",
       "label": "RC",
@@ -38,6 +39,18 @@
         "default": 0
       }
     },
+     {"id": "mpMax",
+       "label": "Max RC",
+       "description": "Maximum Radioactive Control Points.",
+       "emoji": "",
+       "schema": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 999,
+         "default": 5
+       }
+     }
+   ],
     {
       "id": "movementRange",
       "label": "Move",
