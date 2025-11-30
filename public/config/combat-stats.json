@@ -13,8 +13,8 @@
     },
     {
       "id": "mp",
-      "label": "MP",
-      "description": "Mana Points - Resource for spells and abilities",
+      "label": "RC",
+      "description": "Radioactive Control Points. Affects Spells.",
       "emoji": "✨",
       "schema": {
         "type": "integer",
@@ -35,8 +35,8 @@
     },
     {
       "id": "abilityBonus",
-      "label": "Ability",
-      "description": "Bonus to ability checks and saves",
+      "label": "Ability Bonus",
+      "description": "Bonus dice to all Skill Rolls, Saves, and Attacks.",
       "emoji": "🎯",
       "schema": {
         "type": "integer",
@@ -45,8 +45,8 @@
     },
     {
       "id": "attackPower",
-      "label": "Attack",
-      "description": "Physical attack damage bonus",
+      "label": "Attack Power",
+      "description": "Affects class features and number of Attacks made during Multi-Strike.",
       "emoji": "⚡",
       "schema": {
         "type": "integer",
@@ -55,8 +55,8 @@
     },
     {
       "id": "spellPower",
-      "label": "Spell",
-      "description": "Spell damage and healing bonus",
+      "label": "Spell Power",
+      "description": "Affects class features, spell properties, and Spell Save DC.",
       "emoji": "🔮",
       "schema": {
         "type": "integer",
@@ -66,7 +66,7 @@
     {
       "id": "range",
       "label": "Range",
-      "description": "Attack and spell range distance",
+      "description": "Null",
       "emoji": "🎯",
       "schema": {
         "type": "integer",
@@ -77,7 +77,7 @@
     {
       "id": "magicAbility",
       "label": "Magic",
-      "description": "Innate magical ability and resistance",
+      "description": "Null",
       "emoji": "🪄",
       "schema": {
         "type": "integer",
