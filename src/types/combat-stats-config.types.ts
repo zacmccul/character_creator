@@ -17,9 +17,20 @@ export interface CombatStatConfig {
 }
 
 /**
+ * Paired combat stat definition (e.g., HP/Max HP, DR/DR Max)
+ * First stat is the current value, second is the maximum
+ */
+export type PairedCombatStatConfig = readonly [CombatStatConfig, CombatStatConfig];
+
+/**
+ * Combat stat or paired stat union type
+ */
+export type CombatStatOrPair = CombatStatConfig | PairedCombatStatConfig;
+
+/**
  * Complete combat stats section configuration
  */
 export interface CombatStatsConfig {
   readonly title: string; // Section title
-  readonly stats: readonly CombatStatConfig[]; // List of combat stats
+  readonly stats: readonly CombatStatOrPair[]; // List of combat stats (single or paired)
 }

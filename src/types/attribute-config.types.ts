@@ -6,11 +6,12 @@
 /**
  * OpenAPI-style numeric schema for attribute constraints
  * Based on OpenAPI 3.0 numeric schema properties
+ * Supports "dynamic" as maximum to indicate value should be capped by paired stat
  */
 export interface NumericSchema {
   readonly type: 'integer' | 'number';
   readonly minimum?: number;
-  readonly maximum?: number;
+  readonly maximum?: number | 'dynamic';
   readonly exclusiveMinimum?: number;
   readonly exclusiveMaximum?: number;
   readonly multipleOf?: number;

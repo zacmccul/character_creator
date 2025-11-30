@@ -1,16 +1,32 @@
 {
   "title": "⚔️ Combat Stats",
   "stats": [
-    {
-      "id": "hp",
-      "label": "HP",
-      "description": "Hit Points - Character's health",
-      "emoji": "❤️",
-      "schema": {
-        "type": "integer",
-        "default": 0
+    [
+      {
+        "id": "hp",
+        "label": "HP",
+        "description": "Hit Points - Current health",
+        "emoji": "❤️",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": "dynamic",
+          "default": 10
+        }
+      },
+      {
+        "id": "hpMax",
+        "label": "Max HP",
+        "description": "Maximum Hit Points",
+        "emoji": "",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 999,
+          "default": 10
+        }
       }
-    },
+    ],
     {
       "id": "mp",
       "label": "RC",

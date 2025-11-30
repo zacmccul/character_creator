@@ -60,9 +60,14 @@ export function getAttributeIds(config: AttributesConfig): string[] {
  * Validate that an attribute value conforms to its schema constraints
  * @param attribute - Attribute configuration
  * @param value - Value to validate
+ * @param dynamicMaxValue - Optional maximum value when schema.maximum is "dynamic"
  * @returns True if valid, false otherwise
  */
-export function validateAttributeValue(attribute: AttributeConfig, value: number): boolean {
+export function validateAttributeValue(
+  attribute: AttributeConfig, 
+  value: number, 
+  dynamicMaxValue?: number
+): boolean {
   const { schema } = attribute;
   
   // Check type
@@ -76,8 +81,15 @@ export function validateAttributeValue(attribute: AttributeConfig, value: number
   }
   
   // Check maximum
-  if (schema.maximum !== undefined && value > schema.maximum) {
-    return false;
+  if (schema.maximum !== undefined) {
+    if (schema.maximum === 'dynamic') {
+      // Use the provided dynamic max value if available
+      if (dynamicMaxValue !== undefined && value > dynamicMaxValue) {
+        return false;
+      }
+    } else if (value > schema.maximum) {
+      return false;
+    }
   }
   
   // Check exclusive minimum
@@ -110,13 +122,23 @@ export function getAttributeDefault(attribute: AttributeConfig): number {
 /**
  * Get min/max bounds for an attribute
  * @param attribute - Attribute configuration
+ * @param dynamicMaxValue - Optional maximum value when schema.maximum is "dynamic"
  * @returns Object with min and max values
  */
-export function getAttributeBounds(attribute: AttributeConfig): { min: number; max: number } {
+export function getAttributeBounds(
+  attribute: AttributeConfig, 
+  dynamicMaxValue?: number
+): { min: number; max: number } {
   const { schema } = attribute;
   
   let min = schema.minimum ?? Number.MIN_SAFE_INTEGER;
-  let max = schema.maximum ?? Number.MAX_SAFE_INTEGER;
+  let max: number;
+  
+  if (schema.maximum === 'dynamic') {
+    max = dynamicMaxValue ?? Number.MAX_SAFE_INTEGER;
+  } else {
+    max = schema.maximum ?? Number.MAX_SAFE_INTEGER;
+  }
   
   // Adjust for exclusive bounds
   if (schema.exclusiveMinimum !== undefined) {

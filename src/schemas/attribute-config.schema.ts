@@ -7,19 +7,20 @@ import { z } from 'zod';
 
 /**
  * OpenAPI-style numeric schema validator
+ * Supports "dynamic" as a maximum value to indicate the value should be capped by a paired stat
  */
 export const NumericSchemaSchema = z.object({
   type: z.enum(['integer', 'number']),
   minimum: z.number().optional(),
-  maximum: z.number().optional(),
+  maximum: z.union([z.number(), z.literal('dynamic')]).optional(),
   exclusiveMinimum: z.number().optional(),
   exclusiveMaximum: z.number().optional(),
   multipleOf: z.number().positive().optional(),
   default: z.number().optional(),
 }).refine(
   (data) => {
-    // Validate that minimum < maximum if both are present
-    if (data.minimum !== undefined && data.maximum !== undefined) {
+    // Validate that minimum < maximum if both are present and maximum is not dynamic
+    if (data.minimum !== undefined && data.maximum !== undefined && data.maximum !== 'dynamic') {
       return data.minimum <= data.maximum;
     }
     return true;

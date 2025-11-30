@@ -12,11 +12,16 @@ import { LevelClassConfigSchema } from '@/schemas/level-class-config.schema';
 import type { AttributesConfig } from '@/types/attribute-config.types';
 import type { EnumsConfig, EnumDefinition } from '@/types/enums-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
-import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import type { CombatStatsConfig, CombatStatConfig, CombatStatOrPair } from '@/types/combat-stats-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
 import type { LevelClassConfig } from '@/types/level-class-config.types';
 import { ZodError } from 'zod';
 import { configs } from '@/config';
+
+// Type guard for paired stats
+const isPairedStat = (stat: CombatStatOrPair): stat is readonly [CombatStatConfig, CombatStatConfig] => {
+  return Array.isArray(stat);
+};
 
 /**
  * Configuration validation error with detailed information
@@ -359,17 +364,44 @@ class ConfigManager {
       }
     });
 
-    // Collect all combat stat IDs
-    combatStats.stats.forEach((stat, index) => {
-      const existing = idMap.get(stat.id);
-      if (existing) {
-        errors.push({
-          configName: 'combatStats',
-          path: `stats.${index}.id`,
-          message: `ID '${stat.id}' is already used in ${existing.configName} at ${existing.path}`,
-        });
+    // Collect all combat stat IDs (handling both single and paired stats)
+    combatStats.stats.forEach((statOrPair, index) => {
+      if (isPairedStat(statOrPair)) {
+        // Paired stat - check both IDs
+        const [firstStat, secondStat] = statOrPair;
+        const existing1 = idMap.get(firstStat.id);
+        if (existing1) {
+          errors.push({
+            configName: 'combatStats',
+            path: `stats.${index}[0].id`,
+            message: `ID '${firstStat.id}' is already used in ${existing1.configName} at ${existing1.path}`,
+          });
+        } else {
+          idMap.set(firstStat.id, { configName: 'combatStats', path: `stats.${index}[0].id` });
+        }
+        
+        const existing2 = idMap.get(secondStat.id);
+        if (existing2) {
+          errors.push({
+            configName: 'combatStats',
+            path: `stats.${index}[1].id`,
+            message: `ID '${secondStat.id}' is already used in ${existing2.configName} at ${existing2.path}`,
+          });
+        } else {
+          idMap.set(secondStat.id, { configName: 'combatStats', path: `stats.${index}[1].id` });
+        }
       } else {
-        idMap.set(stat.id, { configName: 'combatStats', path: `stats.${index}.id` });
+        // Single stat - TypeScript now knows statOrPair is CombatStatConfig
+        const existing = idMap.get(statOrPair.id);
+        if (existing) {
+          errors.push({
+            configName: 'combatStats',
+            path: `stats.${index}.id`,
+            message: `ID '${statOrPair.id}' is already used in ${existing.configName} at ${existing.path}`,
+          });
+        } else {
+          idMap.set(statOrPair.id, { configName: 'combatStats', path: `stats.${index}.id` });
+        }
       }
     });
 

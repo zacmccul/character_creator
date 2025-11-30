@@ -5,16 +5,22 @@
 
 import type { CharacterSheet, Attributes, CombatStats, CharacterInfo, InventorySlots } from '@/types/character.types';
 import type { AttributesConfig } from '@/types/attribute-config.types';
-import type { CombatStatsConfig } from '@/types/combat-stats-config.types';
+import type { CombatStatsConfig, CombatStatConfig, CombatStatOrPair } from '@/types/combat-stats-config.types';
 import type { CharacterInfoConfig } from '@/types/character-info-config.types';
 import type { InventoryConfig } from '@/types/inventory-config.types';
 import { evaluateFormula } from './formula-evaluator';
+
+// Type guard for paired stats
+const isPairedStat = (stat: CombatStatOrPair): stat is readonly [CombatStatConfig, CombatStatConfig] => {
+  return Array.isArray(stat);
+};
 
 /**
  * Sync combat stats with configuration
  * - Removes stats not in config
  * - Adds missing stats with default values from config
  * - Preserves existing stat values that are still in config
+ * - Handles both single stats and paired stats (e.g., HP/Max HP)
  */
 export const syncCombatStatsWithConfig = (
   currentStats: CombatStats,
@@ -23,9 +29,16 @@ export const syncCombatStatsWithConfig = (
   const syncedStats: Record<string, number> = {};
 
   // Iterate through config stats and populate synced object
-  for (const statConfig of config.stats) {
-    // Use existing value if present, otherwise use default from schema
-    syncedStats[statConfig.id] = currentStats[statConfig.id] ?? (statConfig.schema.default ?? 0);
+  for (const statOrPair of config.stats) {
+    if (isPairedStat(statOrPair)) {
+      // Paired stat - handle both stats in the pair
+      const [firstStat, secondStat] = statOrPair;
+      syncedStats[firstStat.id] = currentStats[firstStat.id] ?? (firstStat.schema.default ?? 0);
+      syncedStats[secondStat.id] = currentStats[secondStat.id] ?? (secondStat.schema.default ?? 0);
+    } else {
+      // Single stat - TypeScript now knows statOrPair is CombatStatConfig
+      syncedStats[statOrPair.id] = currentStats[statOrPair.id] ?? (statOrPair.schema.default ?? 0);
+    }
   }
 
   return syncedStats as CombatStats;
@@ -109,7 +122,19 @@ export const needsCombatStatsSync = (
   currentStats: CombatStats,
   config: CombatStatsConfig
 ): boolean => {
-  const configStatIds = new Set(config.stats.map(s => s.id));
+  // Collect all stat IDs from config (handling both single and paired stats)
+  const configStatIds = new Set<string>();
+  for (const statOrPair of config.stats) {
+    if (isPairedStat(statOrPair)) {
+      const [firstStat, secondStat] = statOrPair;
+      configStatIds.add(firstStat.id);
+      configStatIds.add(secondStat.id);
+    } else {
+      // TypeScript now knows statOrPair is CombatStatConfig
+      configStatIds.add(statOrPair.id);
+    }
+  }
+  
   const currentStatIds = new Set(Object.keys(currentStats));
 
   // Check if current has stats not in config
