@@ -46,18 +46,18 @@
       "description": "Available equipment items",
       "values": [
         "None",
-        { "name": "Longsword", "desc": "A versatile one-handed blade" },
-        { "name": "Shortsword", "desc": "Quick and nimble blade" },
-        { "name": "Greatsword", "desc": "Massive two-handed weapon" },
-        { "name": "Dagger", "desc": "Small concealable blade" },
-        { "name": "Bow", "desc": "Ranged weapon for precision strikes" },
-        { "name": "Crossbow", "desc": "Mechanical ranged weapon" },
-        { "name": "Staff", "desc": "Magical focus and melee weapon" },
-        { "name": "Wand", "desc": "Precise magical implement" },
-        { "name": "Shield", "desc": "Defensive tool for blocking attacks" },
-        { "name": "Light Armor", "desc": "Flexible protection with minimal encumbrance" },
-        { "name": "Medium Armor", "desc": "Balanced protection and mobility" },
-        { "name": "Heavy Armor", "desc": "Maximum protection at the cost of mobility" }
+        { "name": "Longsword", "desc": "Classification: Sword. Handling: STR. Damage: 2/3/2. Range: 1 Traits: Melee, One-Handed, Murderstroke 1AP: Until the end of your turn, reduce the BNS and CRT stats of this weapon to 0 and increase the DMG stat by the total amount reduced." },
+        { "name": "Great Blade", "desc": "Quick and nimble blade" },
+        { "name": "Steel-Shot Revolver", "desc": "Massive two-handed weapon" },
+        { "name": "Sabre", "desc": "Small concealable blade" },
+        { "name": "Estoc", "desc": "Ranged weapon for precision strikes" },
+        { "name": "Cloak", "desc": "Mechanical ranged weapon" },
+        { "name": "Lead-Shot Revolver", "desc": "Magical focus and melee weapon" },
+        { "name": "Great Bow", "desc": "Precise magical implement" },
+        { "name": "Greatsword", "desc": "Defensive tool for blocking attacks" },
+        { "name": "Hatchet", "desc": "Flexible protection with minimal encumbrance" },
+        { "name": "Buckler", "desc": "Balanced protection and mobility" },
+        { "name": "Steel-Buck Shotgun", "desc": "Maximum protection at the cost of mobility" }
       ]
     },
     {
