@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/combat-stats.schema.json",
   "title": "⚔️ Combat Stats",
   "stats": [
     [

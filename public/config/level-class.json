@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/level-class.schema.json",
   "title": "🎭 Classes & Levels",
   "description": "Manage your character's classes and levels with multiclass support",
   "classEnum": {

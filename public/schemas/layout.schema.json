@@ -4,7 +4,11 @@
   "title": "Layout Configuration",
   "description": "Configuration for the character sheet layout and component arrangement",
   "type": "object",
-  "required": ["version", "name", "columns", "items"],
+  "required": ["version", "name", "items"],
+  "anyOf": [
+    { "required": ["columns"] },
+    { "required": ["grid"] }
+  ],
   "properties": {
     "version": {
       "type": "string",
@@ -50,6 +54,55 @@
     },
     "container": {
       "$ref": "#/definitions/containerConfig"
+    },
+    "grid": {
+      "type": "object",
+      "description": "Grid layout configuration for responsive grid-based layouts",
+      "properties": {
+        "templateColumns": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "object" }
+          ]
+        },
+        "columns": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "integer", "minimum": 1 },
+                "sm": { "type": "integer", "minimum": 1 },
+                "md": { "type": "integer", "minimum": 1 },
+                "lg": { "type": "integer", "minimum": 1 },
+                "xl": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": false
+            }
+          ],
+          "description": "Number of grid columns or responsive column counts"
+        },
+        "gap": { "type": "number", "minimum": 0 },
+        "templateRows": { "type": "string" },
+        "minChildWidth": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "string" },
+                "sm": { "type": "string" },
+                "md": { "type": "string" },
+                "lg": { "type": "string" },
+                "xl": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "autoFlow": { "type": "string" }
+      },
+      "additionalProperties": false
     }
   },
   "definitions": {
@@ -97,7 +150,7 @@
     },
     "layoutItem": {
       "type": "object",
-      "required": ["componentId", "column"],
+      "required": ["componentId"],
       "properties": {
         "componentId": {
           "type": "string",
@@ -113,8 +166,56 @@
         },
         "column": {
           "type": "integer",
-          "description": "Column index (0-based) where this component should be placed",
+          "description": "Column index (0-based) where this component should be placed (for column-type layouts)",
           "minimum": 0
+        },
+        "colStart": {
+          "oneOf": [
+            { "type": "integer", "minimum": 0 },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "integer", "minimum": 0 },
+                "sm": { "type": "integer", "minimum": 0 },
+                "md": { "type": "integer", "minimum": 0 },
+                "lg": { "type": "integer", "minimum": 0 },
+                "xl": { "type": "integer", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "rowStart": {
+          "oneOf": [
+            { "type": "integer", "minimum": 0 },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "integer", "minimum": 0 },
+                "sm": { "type": "integer", "minimum": 0 },
+                "md": { "type": "integer", "minimum": 0 },
+                "lg": { "type": "integer", "minimum": 0 },
+                "xl": { "type": "integer", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "colSpan": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "integer", "minimum": 1 },
+                "sm": { "type": "integer", "minimum": 1 },
+                "md": { "type": "integer", "minimum": 1 },
+                "lg": { "type": "integer", "minimum": 1 },
+                "xl": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": false
+            }
+          ]
         },
         "minH": {
           "type": "string",
@@ -142,15 +243,39 @@
           "default": "container.xl"
         },
         "px": {
-          "type": "number",
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "number", "minimum": 0 },
+                "sm": { "type": "number", "minimum": 0 },
+                "md": { "type": "number", "minimum": 0 },
+                "lg": { "type": "number", "minimum": 0 },
+                "xl": { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          ],
           "description": "Horizontal padding in Chakra UI spacing units",
-          "minimum": 0,
           "default": 4
         },
         "py": {
-          "type": "number",
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "object",
+              "properties": {
+                "base": { "type": "number", "minimum": 0 },
+                "sm": { "type": "number", "minimum": 0 },
+                "md": { "type": "number", "minimum": 0 },
+                "lg": { "type": "number", "minimum": 0 },
+                "xl": { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          ],
           "description": "Vertical padding in Chakra UI spacing units",
-          "minimum": 0,
           "default": 4
         }
       },

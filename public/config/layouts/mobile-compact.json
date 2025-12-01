@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schemas/layout.schema.json",
   "version": "1.0.0",
   "name": "Compact Mobile-First Layout",
   "description": "Single column layout optimized for mobile devices with compact spacing",

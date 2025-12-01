@@ -13,9 +13,12 @@
     },
     "stats": {
       "type": "array",
-      "description": "List of combat stat definitions",
+      "description": "List of combat stat definitions. Each item can be a single stat or an array of stats for layout purposes (e.g., two-column rows).",
       "items": {
-        "$ref": "#/definitions/stat"
+        "oneOf": [
+          { "$ref": "#/definitions/stat" },
+          { "type": "array", "items": { "$ref": "#/definitions/stat" } }
+        ]
       },
       "minItems": 1
     }
@@ -64,8 +67,17 @@
           "description": "Minimum allowed value (inclusive)"
         },
         "maximum": {
-          "type": "number",
-          "description": "Maximum allowed value (inclusive)"
+          "oneOf": [
+            {
+              "type": "number",
+              "description": "Maximum allowed value (inclusive)"
+            },
+            {
+              "type": "string",
+              "enum": ["dynamic"],
+              "description": "Allow special string token to indicate dynamic maximum (e.g., depends on character level or other stats)"
+            }
+          ]
         },
         "exclusiveMinimum": {
           "type": "number",

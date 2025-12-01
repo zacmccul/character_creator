@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/inventory.schema.json",
   "title": "🎒 Inventory",
   "tabs": [
     {

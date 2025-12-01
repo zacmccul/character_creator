@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schemas/layout.schema.json",
   "version": "1.0.0",
   "name": "Combat-Focused Layout",
   "description": "Emphasizes combat stats and attributes for quick reference during gameplay",

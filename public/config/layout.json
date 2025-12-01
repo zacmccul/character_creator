@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/layout.schema.json",
   "version": "1.0.0",
   "name": "Default Two-Column Layout",
   "description": "Traditional two-column layout with attributes on the left and main content on the right. Layout uses columns (0-indexed) with VStack for vertical stacking within each column.",

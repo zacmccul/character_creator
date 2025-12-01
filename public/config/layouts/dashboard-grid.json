@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schemas/layout.schema.json",
   "version": "1.0.0",
   "name": "Grid Dashboard Layout",
   "description": "Card-based dashboard with auto-fit grid, perfect for tablets",

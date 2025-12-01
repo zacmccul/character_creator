@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/enums.schema.json",
   "enums": [
     {
       "id": "species",

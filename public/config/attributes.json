@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/attributes.schema.json",
   "title": "🎲 Attributes",
   "attributes": [
     {

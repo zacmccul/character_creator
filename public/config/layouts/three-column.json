@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schemas/layout.schema.json",
   "version": "1.0.0",
   "name": "Three-Column Wide Screen Layout",
   "description": "Optimized for wide screens with three columns of information",

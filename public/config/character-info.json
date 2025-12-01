@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/character-info.schema.json",
   "title": "👤 Character Information",
   "fields": [
     {
