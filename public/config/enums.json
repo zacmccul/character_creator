@@ -47,7 +47,7 @@
       "description": "Available equipment items",
       "values": [
         "None",
-        { "name": "Longsword", "desc": "Classification: Sword. Handling: STR. \n\nDamage: 2/3/2. Range: 1 Traits: Melee, One-Handed, Murderstroke 1AP: Until the end of your turn, reduce the BNS and CRT stats of this weapon to 0 and increase the DMG stat by the total amount reduced." },
+        { "name": "Longsword", "desc": "Classification: Sword. Handling: STR.\nDamage: 2/3/2. Range: 1 \nTraits: Melee, One-Handed, Murderstroke. \nMurderstroke (1AP): Until the end of your turn, reduce the BNS and CRT stats of this weapon to 0 and increase the DMG stat by the total amount reduced." },
         { "name": "Great Blade", "desc": "Quick and nimble blade" },
         { "name": "Steel-Shot Revolver", "desc": "Massive two-handed weapon" },
         { "name": "Sabre", "desc": "Small concealable blade" },
