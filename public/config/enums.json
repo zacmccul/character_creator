@@ -7,8 +7,10 @@
       "description": "Available character species/races",
       "values": [
         { "name": "Ourlean", "desc": "Technical Know-How: When you use a piece of Equipment or Consumable that features the Reactor trait, if you are not Proficient in that item, your base Success Range for it is a 4+." },
-        { "name": "Gex", "desc": "Camouflage 1AP: Until the start of your next turn, you do not count as a Valid Target for Spells and Attacks. Afterward, this action costs 1 more AP to use until the start of your next Expedition. This effect stacks." },
+        { "name": "Gex", "desc": "Camouflage 1AP: Until the start of your next turn, you do not count as a Valid Target for Spells and Attacks, and you cannot Threaten other creatures. Afterward, this action costs 1 more AP to use until the start of your next Expedition. This effect stacks." },
+        { "name": "Gex: Deinos", "desc": "Imposing Frame: Friendly creatures can treat you as Heavy Cover while within 1 Tile of you. While you are Threatening a creature, it suffers an additional -1 penalty to its Movement stat (after halving it)."},
         { "name": "Rodensha", "desc": "Scurry-Away: When you successfully hit a creature with a Critical Hit, the next Fall-Back Action you perform costs 1 AP until the end of your turn. This is reduced to 0 AP instead if you landed a Critical Hit during a Strike Action." },
+        { "name": "Rodensha: Packrat", "desc": "Pockets: When you remove a Consumable from your Inventory after using it, roll a D6. On a result of 5+, select another Consumable available to you with a Treasure Token cost of 2 or lower and add it into your Inventory in an empty slot. After successfully using this feature, you cannot use it again until you consume a Rest charge or start an Expedition; whichever comes first."},
         { "name": "Hanoan", "desc": "Starlight Inheritance: Select one Spell from any Tier 1 Category. You gain access to that spell, and can cast it once while ignoring its Radioactive Control Cost. You regain the ability to cast this spell this way when you consume a Rest Charge." }
       ]
     },
