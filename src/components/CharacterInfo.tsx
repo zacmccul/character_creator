@@ -111,7 +111,7 @@ export const CharacterInfo = () => {
       return (
         <Field key={field.id} label={field.label}>
           {selectedDesc ? (
-            <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+            <Tooltip content={<Text fontSize="sm" whiteSpace="pre-wrap">{selectedDesc}</Text>}>
               {selectField}
             </Tooltip>
           ) : (

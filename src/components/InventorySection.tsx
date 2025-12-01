@@ -210,7 +210,7 @@ export const InventorySection = () => {
                         return (
                           <Field key={index} label={`${tab.emoji} Slot ${index + 1}`}>
                             {selectedDesc ? (
-                              <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+                              <Tooltip content={<Text fontSize="sm" whiteSpace="pre-wrap">{selectedDesc}</Text>}>
                                 {selectField}
                               </Tooltip>
                             ) : (

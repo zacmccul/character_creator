@@ -103,11 +103,11 @@ export const CombatStatsSection = () => {
           <Tooltip content={
             <Flex direction="column" gap={1}>
               <Text fontSize="sm" fontWeight="semibold">{firstStat.label}</Text>
-              <Text fontSize="sm">{firstStat.description}</Text>
+              <Text fontSize="sm" whiteSpace="pre-wrap">{firstStat.description}</Text>
               {secondStat.description && (
                 <>
                   <Text fontSize="sm" fontWeight="semibold" mt={1}>{secondStat.label}</Text>
-                  <Text fontSize="sm">{secondStat.description}</Text>
+                  <Text fontSize="sm" whiteSpace="pre-wrap">{secondStat.description}</Text>
                 </>
               )}
             </Flex>
@@ -159,7 +159,7 @@ export const CombatStatsSection = () => {
 
       return (
         <Flex key={statConfig.id} direction="column" gap={2}>
-          <Tooltip content={<Text fontSize="sm">{statConfig.description}</Text>}>
+          <Tooltip content={<Text fontSize="sm" whiteSpace="pre-wrap">{statConfig.description}</Text>}>
             <Button variant="outline" disabled width="full" h={8} fontSize="sm" fontWeight="medium">
               {statConfig.emoji} {statConfig.label}
             </Button>

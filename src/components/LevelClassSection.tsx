@@ -156,7 +156,7 @@ export const LevelClassSection = () => {
                         );
 
                         return selectedDesc ? (
-                          <Tooltip content={<Text fontSize="sm">{selectedDesc}</Text>}>
+                          <Tooltip content={<Text fontSize="sm" whiteSpace="pre-wrap">{selectedDesc}</Text>}>
                             {selectField}
                           </Tooltip>
                         ) : (

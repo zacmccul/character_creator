@@ -13,9 +13,9 @@ export const Tooltip = ({ content, children }: TooltipProps) => {
         {children}
       </ChakraTooltip.Trigger>
       <ChakraTooltip.Positioner>
-        <ChakraTooltip.Content>
-          {content}
-        </ChakraTooltip.Content>
+        <ChakraTooltip.Content whiteSpace="pre-wrap">
+            {content}
+          </ChakraTooltip.Content>
       </ChakraTooltip.Positioner>
     </ChakraTooltip.Root>
   );

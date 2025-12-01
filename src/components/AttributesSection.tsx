@@ -96,7 +96,7 @@ export const AttributesSection = () => {
                   <Tooltip content={
                     <Box>
                       <Text fontSize="sm" fontWeight="medium">{attrConfig.label}</Text>
-                      <Text fontSize="xs" color="gray.400" mt={1}>{attrConfig.description}</Text>
+                      <Text fontSize="xs" color="gray.400" mt={1} whiteSpace="pre-wrap">{attrConfig.description}</Text>
                     </Box>
                   }>
                     <Input
