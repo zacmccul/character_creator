@@ -24,7 +24,7 @@
       "type": "enum",
       "label": "Star Sign",
       "enumRef": {
-        "enumId": "experience"
+        "enumId": "starsign"
       },
       "description": "Your character's background experience"
     },
