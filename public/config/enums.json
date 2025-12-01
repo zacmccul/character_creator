@@ -13,7 +13,7 @@
       ]
     },
     {
-      "id": "experience",
+      "id": "starsign",
       "label": "Star Sign",
       "description": "Major constellation present during character's birth. No current mechanical implications.",
       "values": [
