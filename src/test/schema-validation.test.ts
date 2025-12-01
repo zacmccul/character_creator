@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import Ajv from 'ajv';
+import Ajv, { type ErrorObject } from 'ajv';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -92,7 +92,7 @@ describe('Public config against JSON schemas', () => {
       const valid = validate(cfg);
       if (!valid) {
         // Provide detailed errors for easier debugging in test output
-        const message = (validate.errors || []).map((e) => `${e.instancePath} ${e.message}`).join(', ');
+        const message = (validate.errors || []).map((e: ErrorObject) => `${e.instancePath} ${e.message}`).join(', ');
         expect(valid, `Schema validation failed for ${cfgPath}: ${message}`).toBeTruthy();
       } else {
         expect(valid).toBeTruthy();
