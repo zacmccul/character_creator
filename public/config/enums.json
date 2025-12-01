@@ -89,17 +89,14 @@
       "label": "Experience Bank Items",
       "description": "Memories, knowledge, and training",
       "values": [
-        "None",
-        "Combat Training",
-        "Arcane Knowledge",
-        "Survival Skills",
-        "Diplomatic Experience",
-        "Crafting Expertise",
-        "Lore",
-        "Language",
-        "Trade Skill",
-        "Ritual",
-        "Technique"
+        { "name": "Steel Mill Worker", "desc": "You gain a +1 situational bonus on Skill Rolls made to identify and make observations about Steel products.\n\nYou gain access to the Steelworker's Coveralls Equipment."},
+        { "name": "Reactor Operator", "desc": "You gain a +1 situational bonus on Skill Rolls made to identify and understand the properties and workings of Nuclear Reactors. \n\nWhen you are targeted for the effects of a Spell, you can reroll one of your Save dice. You can only do this once per Round in Combat."},
+        { "name": "Void Navigator", "desc": "When making rolls to use a vehicle, you can treat a number of dice equal to 1 + your Ability Bonus to be successful without rolling them. You must be in control of the vehicle to gain this bonus.\n\nYou also increase your Skill Level with one Classification of weapon of your choice that possesses the Firearm trait by 1 stage (to a maximum of Proficient)."},
+        { "name": "Artisan", "desc": "When you consume Treasure Tokens for items or a Service, roll a D6. On a result of 5+, you gain 1 Treasure Token. You cannot use this effect when purchasing things that cost 1 Treasure Token.\n\nYou can also reroll 1 die whenever making a Skill Roll to discern the quality or authenticity of an object."},
+        { "name": "Sewer Dweller", "desc": "When making rolls to navigate or recall information about urban passageways such as sewers or alleyways, you can treat a number of dice equal to 1 + your Ability Bonus as being successful without rolling them.\n\nYou also gain access to the Glass Bottle equipment."},
+        { "name": "Ore Miner", "desc": "You gain a +1 situational bonus on Skill Rolls made regarding mining activities, materials, and equipment.\n\nWhile you are Underground, you gain a +1 Damage Reduction bonus."},
+        { "name": "Astrologist", "desc": "You gain a +1 Situational bonuss on Skill Rolls made to recall information about Constellations.\n\nWhen you are casting a spell that has the Perception Handling type, you can reroll one of your dice involved in that spell."},
+        { "name": "Jungle Dweller", "desc": "When making rolls to navigate or recall information about natural Jungle environments such as rainforests or swamps, you can treat a number of dice equal to 1 + your Ability Bonus as successful without rolling them.\n\nYou gain access to the Blowpipe Equipment."}
       ]
     }
   ]
