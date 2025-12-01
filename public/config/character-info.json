@@ -21,7 +21,7 @@
     {
       "id": "character_experience",
       "type": "enum",
-      "label": "Background",
+      "label": "Star Sign",
       "enumRef": {
         "enumId": "experience"
       },
