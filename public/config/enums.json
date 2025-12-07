@@ -93,11 +93,7 @@
         { "name": "Blood Bag", "desc": "Classification: Consumable. Handling: INT.\n\nRange: 1. Action Point Cost: 1-2.\n\nEffect: Make an Intelligence Skill Roll against the Death Save DC of target creature. On a success, that creature's Death Save DC does not increase until the end of their next turn. You are considered Proficient in this Consumable and are considered Professional if you spent 2 AP to use this."},
         { "name": "Coil of Rope", "desc": "Classification: Consumable. Handling: DEX.\n\nRange: 1. Action Point Cost: 1.\n\nEffect: You gain a +1 situational bonus on Skill Rolls to bind two or more objects together. If used on a creature, that creature is only a Valid Target if it occupies no more than 4 Tiles. When using this Consumable on a creautre, make an Attack with it. If that attack would be successful, the Target becomes Suppressed. While a creature is Suppressed this way, it must roll a D6 at the start of each of its turns. On a result of 5+, it is no longer Suppressed and this Conusmable is immediately destroyed."},
         { "name": "Rations", "desc": "Classification: Consumable. Handling: CON.\n\nRange: 0. Action Point Cost: 0.\n\nEffect: At the end of a Combat in which you won, you may use this Consumable to recover Hit Points equal to your Character Level."},
-        "Bomb",
-        "Poison",
-        "Food",
-        "Water",
-        "Bandages"
+        { "name": "Company Banner", "desc": "Classification: Consumable. Handling: STR.\n\nRange: 0-1. Action Point Cost: 1-2.\n\nEffect: Place a Banner Token in a Tile within Range. It becomes an Objective with a Control Range of 0-1 Tiles. It does not count towards victory conditions. \n\nWhile the Banner is placed, it provides Friendly creatures within its Line of Sight the Metabolism 2 condition until the exit Line of Sight. If you spent 2 Action Points to use this Consumable, Friendly creatures within this Token's Line of Sight immediately regain Hit Points equal to your Soldier Level."}
       ]
     },
     {
