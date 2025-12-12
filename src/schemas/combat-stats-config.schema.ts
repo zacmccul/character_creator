@@ -15,6 +15,7 @@ export const CombatStatConfigSchema = z.object({
   description: z.string(),
   emoji: z.string().optional(),
   schema: NumericSchemaSchema,
+  automated: z.boolean().optional(),
 });
 
 /**

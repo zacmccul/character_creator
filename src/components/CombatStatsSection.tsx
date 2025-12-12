@@ -4,10 +4,10 @@
  * Supports both single stats and paired stats (e.g., HP/Max HP)
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
-import { useCharacterStore } from '@/stores/character.store';
+import { useCharacterStore, useDerivedStats } from '@/stores/character.store';
 import type { CombatStatsConfig, CombatStatOrPair, CombatStatConfig } from '@/types/combat-stats-config.types';
 import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
 import { configManager } from '@/utils/config-manager';
@@ -19,6 +19,7 @@ const isPairedStat = (stat: CombatStatOrPair): stat is readonly [CombatStatConfi
 
 export const CombatStatsSection = () => {
   const { character, updateCombatStat, syncWithConfigs } = useCharacterStore();
+  const { totalLevel } = useDerivedStats();
   const [config, setConfig] = useState<CombatStatsConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
 
@@ -85,6 +86,20 @@ export const CombatStatsSection = () => {
       }
     }
   };
+
+  /**
+   * TODO - automate more stats
+   * Max HP
+   * Spell Power
+   * Attack Power
+   * Armor Value (?)
+   * Damage Reduction (?)
+   */
+
+  //update abilityBonus automatically
+  useEffect(() => {
+      updateCombatStat('abilityBonus', Math.floor(totalLevel / 5));
+  }, [totalLevel]);
 
   const renderStat = (statOrPair: CombatStatOrPair) => {
     // Check if this is a paired stat using type guard
@@ -164,19 +179,20 @@ export const CombatStatsSection = () => {
               {statConfig.emoji} {statConfig.label}
             </Button>
           </Tooltip>
-          <Input
-            id={statConfig.id}
-            type={inputType}
-            min={bounds.min}
-            max={bounds.max !== Number.MAX_SAFE_INTEGER ? bounds.max : undefined}
-            step={step}
-            value={value}
-            onChange={(e) => handleStatChange(statConfig.id, e.target.value)}
-            h={12}
-            textAlign="center"
-            fontSize="xl"
-            fontWeight="semibold"
-          />
+            <Input
+              id={statConfig.id}
+              type={inputType}
+              min={bounds.min}
+              max={bounds.max !== Number.MAX_SAFE_INTEGER ? bounds.max : undefined}
+              disabled={statConfig.automated}
+              step={step}
+              value={value}
+              onChange={(e) => handleStatChange(statConfig.id, e.target.value)}
+              h={12}
+              textAlign="center"
+              fontSize="xl"
+              fontWeight="semibold"
+            />
         </Flex>
       );
     }
