@@ -14,6 +14,7 @@ export interface CombatStatConfig {
   readonly description: string; // Tooltip description
   readonly emoji?: string; // Optional emoji icon
   readonly schema: NumericSchema; // OpenAPI-style numeric constraints
+  readonly automated?: boolean; // Optional toggle determing if stat value is automatically calculated
 }
 
 /**
