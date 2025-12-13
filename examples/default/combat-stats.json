@@ -54,7 +54,6 @@
       "label": "Ability",
       "description": "Bonus to ability checks and saves",
       "emoji": "🎯",
-      "automated": true,
       "schema": {
         "type": "integer",
         "default": 0
