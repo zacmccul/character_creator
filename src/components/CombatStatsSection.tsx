@@ -105,9 +105,9 @@ export const CombatStatsSection = () => {
       if (entry.class.data) {
         maxHp += (entry.class.data.hp + character.attributes.CON) * entry.level;
         if (entry.class.data.type === "martial") {
-          casterLevels += entry.level;
-        } else {
           martialLevels += entry.level;
+        } else {
+          casterLevels += entry.level;
         }
       }
     });
