@@ -19,6 +19,7 @@
         "label": "Max HP",
         "description": "Maximum Hit Points",
         "emoji": "",
+        "automated": true,
         "schema": {
           "type": "integer",
           "minimum": 1,

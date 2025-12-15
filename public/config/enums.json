@@ -37,13 +37,55 @@
       "label": "Character Classes",
       "description": "Available character classes",
       "values": [
-        { "name": "Soldier", "desc": "Command your allies to victory and control Objectives with a combination of melee and ranged weapons." },
-        { "name": "Duelist", "desc": "Utilize dynamic special moves to remove single targets from combat. Wide array of equipment." },
-        { "name": "Warrior", "desc": "Protect allies and keep enemies from approaching. Very durable, and has access to high DMG equipment." },
-        { "name": "Medicant", "desc": "Primary healing class. Provides plenty of Consumables and Conditions." },
-        { "name": "Engineer", "desc": "Objective-controlling class that can flexibly cast spells." },
-        { "name": "Artiste", "desc": "Spellcasting class that can provide unique bonuses to allies out of turn order." },
-        { "name": "Voidsman", "desc": "High burst damage spellcaster with access to a unique arsenal of Equipment." }
+        {
+          "name": "Soldier",
+          "desc": "Command your allies to victory and control Objectives with a combination of melee and ranged weapons.",
+          "data": {
+            "type": "martial", "hp": 6
+          } 
+        },
+        {
+          "name": "Duelist",
+          "desc": "Utilize dynamic special moves to remove single targets from combat. Wide array of equipment.",
+          "data": {
+            "type": "martial", "hp": 8
+          }
+        },
+        {
+          "name": "Warrior",
+          "desc": "Protect allies and keep enemies from approaching. Very durable, and has access to high DMG equipment.",
+          "data": {
+            "type": "martial", "hp": 10
+          }
+        },
+        {
+          "name": "Medicant",
+          "desc": "Primary healing class. Provides plenty of Consumables and Conditions.",
+          "data": {
+            "type": "martial", "hp": 6
+          }
+        },
+        {
+          "name": "Engineer",
+          "desc": "Objective-controlling class that can flexibly cast spells.",
+          "data": {
+            "type": "caster", "hp": 6
+          }
+        },
+        {
+          "name": "Artiste",
+          "desc": "Spellcasting class that can provide unique bonuses to allies out of turn order.",
+          "data": {
+            "type": "caster",  "hp": 6
+          }
+        },
+        {
+          "name": "Voidsman",
+          "desc": "High burst damage spellcaster with access to a unique arsenal of Equipment.",
+          "data": {
+            "type": "caster", "hp": 6
+          }
+        }
       ]
     },
     {
