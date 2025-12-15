@@ -6,6 +6,14 @@
 import { z } from 'zod';
 
 /**
+ * Class data config
+ */
+export const ValueDataSchema = z.object({
+  type: z.string(),
+  hp: z.number(),
+})
+
+/**
  * Enum value - can be a simple string or an object with name and optional description
  */
 export const EnumValueSchema = z.union([
@@ -13,6 +21,7 @@ export const EnumValueSchema = z.union([
   z.object({
     name: z.string().min(1, 'Enum value name cannot be empty'),
     desc: z.string().optional(),
+    data: ValueDataSchema.optional(), // This will be OR'd with other data schemas as they are needed/created
   }),
 ]);
 

@@ -4,9 +4,22 @@
  */
 
 /**
+ * Definition for enum data types (ClassData, etc)
+ */
+export type ClassData = {
+  type: "martial" | "caster",
+  hp: number,
+};
+
+/**
+ * Type def for enum values that aren't strings (classes, items, etc.)
+ */
+export type EnumObjectValue = { name: string; desc?: string; data?: ClassData };
+
+/**
  * Enum value - can be a simple string or an object with name and description
  */
-export type EnumValue = string | { name: string; desc?: string };
+export type EnumValue = string | EnumObjectValue;
 
 /**
  * Single enum definition

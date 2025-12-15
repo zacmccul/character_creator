@@ -20,6 +20,7 @@
         "label": "Max HP",
         "description": "Maximum Hit Points",
         "emoji": "",
+        "automated": true,
         "schema": {
           "type": "integer",
           "minimum": 1,
@@ -78,6 +79,7 @@
       "label": "Attack Power",
       "description": "Affects class features and number of Attacks made during Multi-Strike.",
       "emoji": "⚡",
+      "automated": true,
       "schema": {
         "type": "integer",
         "default": 0
@@ -88,6 +90,7 @@
       "label": "Spell Power",
       "description": "Affects class features, spell properties, and Spell Save DC.",
       "emoji": "🔮",
+      "automated": true,
       "schema": {
         "type": "integer",
         "default": 0
