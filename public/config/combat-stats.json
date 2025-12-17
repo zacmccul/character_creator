@@ -69,7 +69,6 @@
       "label": "Ability Bonus",
       "description": "Bonus dice to all Skill Rolls, Saves, and Attacks.",
       "emoji": "🎯",
-      "automated": true,
       "schema": {
         "type": "integer",
         "default": 0
