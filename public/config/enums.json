@@ -84,7 +84,8 @@
         { "name": "Steelworker's Coveralls", "desc": "Classification: Armor \n\nArmor Value: 2. Maximum Hit Points +2. \n\nHeat Protection 2: When you take Heat damage from any source except yourself, you have a situational +2 Damage Reduction bonus for that instance of damage."},
         { "name": "Naginata", "desc": "Classification: Lance Handling: PER.\n\nDamage: 3/4/3. Range: 1-2.\n\nTraits: Melee, Two-Handed, Accurate Charge.\n\nAccurate Charge: When you take the Charge Action, you can reroll all attack dice of the same result during that Action. If you do not use this effect, instead treat your Critical Range on attacks made during the Charge Action as being 1 greater."},
         { "name": "Dai-Katana", "desc": "Classification: Katana. Handling: STR.\n\nDamage: 5/3/3. Range: 1.\n\nTraits: Melee, Two-Handed, One Strike.\n\nOne Strike: When you take the Multi-Strike Action, you can reduce the number of attacks made with this weapon until you are only making 1 attack. If you do, gain bonus Attack Dice on the attack made during the Action equal to 2 times the number of attacks lost."},
-        { "name": "Katana", "desc": "Classification: Katana. Handling: DEX.\n\nDamage: 3/3/4. Range: 1.\n\nTraits: Melee, One-Handed, Quick Sheath.\n\nQuick Sheath: The Sheath Action only costs 1 Action Point to perform."}
+        { "name": "Katana", "desc": "Classification: Katana. Handling: DEX.\n\nDamage: 3/3/4. Range: 1.\n\nTraits: Melee, One-Handed, Quick Sheath.\n\nQuick Sheath: The Sheath Action only costs 1 Action Point to perform."},
+        { "name": "Drone Controller", "desc": "Classification: Special. Handling: INT.\n\nDamage: 1/0/0. Range: 1.\n\nTraits: Melee, One-Handed, Command.\n\nCommand (1AP): Select one of your Drones within 6 Tiles to perform an available 1 AP Action for 0 AP."}
       ]
     },
     {
