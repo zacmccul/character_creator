@@ -7,7 +7,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
-import { useCharacterStore } from '@/stores/character.store';
+import { useCharacterStore, useDerivedStats } from '@/stores/character.store';
 import type { CombatStatsConfig, CombatStatOrPair, CombatStatConfig } from '@/types/combat-stats-config.types';
 import type { LevelEntry } from '@/types/character.types'
 import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
@@ -19,6 +19,7 @@ const isPairedStat = (stat: CombatStatOrPair): stat is readonly [CombatStatConfi
 };
 
 export const CombatStatsSection = () => {
+  const { totalLevel } = useDerivedStats();
   const { character, updateCombatStat, syncWithConfigs } = useCharacterStore();
   const [config, setConfig] = useState<CombatStatsConfig | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
@@ -89,9 +90,6 @@ export const CombatStatsSection = () => {
 
   /**
    * TODO - automate more stats
-   * Max HP
-   * Spell Power
-   * Attack Power
    * Armor Value (?)
    * Damage Reduction (?)
    */
@@ -112,7 +110,7 @@ export const CombatStatsSection = () => {
       }
     });
     updateCombatStat('hpMax', maxHp);
-    updateCombatStat('attackpower', Math.floor(martialLevels/5));
+    updateCombatStat('attackPower', Math.floor(martialLevels/5));
     updateCombatStat('spellPower', Math.floor(casterLevels/5));
     updateCombatStat('abilityBonus', Math.floor(totalLevel / 5));
   }, [character.level, character.attributes]);
@@ -204,6 +202,7 @@ export const CombatStatsSection = () => {
             type={inputType}
             min={bounds.min}
             max={bounds.max !== Number.MAX_SAFE_INTEGER ? bounds.max : undefined}
+            disabled={statConfig.automated}
             step={step}
             value={value}
             onChange={(e) => handleStatChange(statConfig.id, e.target.value)}

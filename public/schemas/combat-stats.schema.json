@@ -47,6 +47,10 @@
           "type": "string",
           "description": "Optional emoji icon"
         },
+        "automated": {
+          "type": "boolean",
+          "description": "Optional Flag for whether we calculate this stat automatically or if it is input from the user"
+        },
         "schema": {
           "$ref": "#/definitions/numericSchema"
         }

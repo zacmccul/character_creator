@@ -14,6 +14,7 @@ export const CombatStatConfigSchema = z.object({
   label: z.string().min(1, 'Combat stat label cannot be empty'),
   description: z.string(),
   emoji: z.string().optional(),
+  automated: z.boolean().optional(),
   schema: NumericSchemaSchema,
 });
 

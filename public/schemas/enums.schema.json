@@ -54,6 +54,9 @@
                   },
                   "desc": {
                     "type": "string"
+                  },
+                  "data": {
+                    "type": "object"
                   }
                 },
                 "additionalProperties": false

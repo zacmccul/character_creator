@@ -13,6 +13,7 @@ export interface CombatStatConfig {
   readonly label: string; // Display name (e.g., "HP", "MP")
   readonly description: string; // Tooltip description
   readonly emoji?: string; // Optional emoji icon
+  readonly automated?: boolean; // Optional flag for stat automation
   readonly schema: NumericSchema; // OpenAPI-style numeric constraints
 }
 

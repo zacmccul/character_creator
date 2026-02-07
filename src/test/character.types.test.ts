@@ -53,14 +53,38 @@ describe('Character Types', () => {
     });
 
     it('should calculate total for single class', () => {
-      const levels = [{ class: CharacterClass.FIGHTER, level: 5 }];
+      const fighterStub: CharacterClass = {
+        name: "Fighter",
+        desc: "",
+        data: {
+          type: "martial",
+          "hp": 10
+        }
+      }
+      const levels = [{ class: fighterStub, level: 5 }];
       expect(calculateTotalLevel(levels)).toBe(5);
     });
 
     it('should calculate total for multiclass', () => {
+      const fighterStub: CharacterClass = {
+        name: "Fighter",
+        desc: "",
+        data: {
+          type: "martial",
+          "hp": 10
+        }
+      };
+      const wizardStub: CharacterClass = {
+        name: "Wizard",
+        desc: "",
+        data: {
+          type: "caster",
+          "hp": 6
+        }
+      }
       const levels = [
-        { class: CharacterClass.FIGHTER, level: 3 },
-        { class: CharacterClass.WIZARD, level: 2 },
+        { class: fighterStub, level: 3 },
+        { class: wizardStub, level: 2 },
       ];
       expect(calculateTotalLevel(levels)).toBe(5);
     });
