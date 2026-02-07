@@ -16,7 +16,7 @@ import { ChangeEvent } from 'react';
 import type { LevelClassConfig } from '@/types/level-class-config.types';
 import type { EnumValue } from '@/types/enums-config.types';
 import { configManager } from '@/utils/config-manager';
-import { getEnumValueName, getEnumValueDescription, findEnumValueByName } from '@/utils/enum-helpers';
+import { getEnumValueName, findEnumValueByName } from '@/utils/enum-helpers';
 
 export const LevelClassSection = () => {
   const { character, addLevel, updateLevel, updateLevelClass, removeLevel } =
@@ -131,17 +131,17 @@ export const LevelClassSection = () => {
                     <Field label="Class">
                       {(() => {
                         // Find the selected enum value to check for description
-                        const selectedValue = findEnumValueByName(classValues, entry.class);
-                        const selectedDesc = selectedValue ? getEnumValueDescription(selectedValue) : undefined;
+                        const selectedDesc = entry.class.desc;
 
                         const selectField = (
                           <NativeSelectRoot>
                             <NativeSelectField
                               id={`class-${index}`}
-                              value={entry.class}
-                              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                                updateLevelClass(index, e.target.value as CharacterClass)
-                              }
+                              value={entry.class.name}
+                              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                                const newClass = findEnumValueByName(classValues, e.target.value);
+                                updateLevelClass(index, newClass as CharacterClass);
+                              }}
                             >
                               {classValues.map((cls) => {
                                 const name = getEnumValueName(cls);

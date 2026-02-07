@@ -3,6 +3,8 @@
  * Core type system for the TTRPG character sheet
  */
 
+import { ClassData } from "./enums-config.types";
+
 // ============================================================================
 // Enums
 // ============================================================================
@@ -24,7 +26,7 @@ export enum Species {
 /**
  * Available character classes
  */
-export enum CharacterClass {
+export enum CharacterClassEnum {
   FIGHTER = 'Fighter',
   WIZARD = 'Wizard',
   ROGUE = 'Rogue',
@@ -122,6 +124,15 @@ export type AttributeType = string;
 // ============================================================================
 // Interfaces
 // ============================================================================
+
+/**
+ * Character Class Object
+ */
+export interface CharacterClass {
+  readonly name: string;
+  readonly desc: string;
+  readonly data: ClassData;
+}
 
 /**
  * Character level entry for multiclassing support

@@ -9,6 +9,7 @@ import { Button, Card, Flex, Grid, Input, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { useCharacterStore } from '@/stores/character.store';
 import type { CombatStatsConfig, CombatStatOrPair, CombatStatConfig } from '@/types/combat-stats-config.types';
+import type { LevelEntry } from '@/types/character.types'
 import { validateAttributeValue, getAttributeBounds } from '@/utils/config-loader';
 import { configManager } from '@/utils/config-manager';
 
@@ -86,6 +87,36 @@ export const CombatStatsSection = () => {
     }
   };
 
+  /**
+   * TODO - automate more stats
+   * Max HP
+   * Spell Power
+   * Attack Power
+   * Armor Value (?)
+   * Damage Reduction (?)
+   */
+  
+  useEffect(() => {
+    // update MaxHP, ability bonus, attack power & spell power
+    let maxHp = 0;
+    let casterLevels = 0;
+    let martialLevels = 0;
+    character.level?.forEach((entry: LevelEntry) => {
+      if (entry.class.data) {
+        maxHp += (entry.class.data.hp + character.attributes.CON) * entry.level;
+        if (entry.class.data.type === "martial") {
+          martialLevels += entry.level;
+        } else {
+          casterLevels += entry.level;
+        }
+      }
+    });
+    updateCombatStat('hpMax', maxHp);
+    updateCombatStat('attackpower', Math.floor(martialLevels/5));
+    updateCombatStat('spellPower', Math.floor(casterLevels/5));
+    updateCombatStat('abilityBonus', Math.floor(totalLevel / 5));
+  }, [character.level, character.attributes]);
+
   const renderStat = (statOrPair: CombatStatOrPair) => {
     // Check if this is a paired stat using type guard
     if (isPairedStat(statOrPair)) {
@@ -93,7 +124,9 @@ export const CombatStatsSection = () => {
       const firstValue = character.combatStats[firstStat.id] ?? 0;
       const secondValue = character.combatStats[secondStat.id] ?? 0;
       const firstBounds = getAttributeBounds(firstStat, secondValue);
+      const firstMax = (firstBounds.max !== Number.MAX_SAFE_INTEGER && firstBounds.max < secondValue) ? firstBounds.max : secondValue;
       const secondBounds = getAttributeBounds(secondStat);
+      const secondMax = secondBounds.max !== Number.MAX_SAFE_INTEGER ? secondBounds.max : undefined;
       
       const inputType = firstStat.schema.type === 'integer' ? 'number' : 'number';
       const step = firstStat.schema.type === 'integer' ? 1 : 0.1;
@@ -121,7 +154,8 @@ export const CombatStatsSection = () => {
               id={firstStat.id}
               type={inputType}
               min={firstBounds.min}
-              max={firstBounds.max !== Number.MAX_SAFE_INTEGER ? firstBounds.max : undefined}
+              max={firstMax}
+              disabled={firstStat.automated}
               step={step}
               value={firstValue}
               onChange={(e) => handleStatChange(firstStat.id, e.target.value, secondStat.id)}
@@ -136,7 +170,8 @@ export const CombatStatsSection = () => {
               id={secondStat.id}
               type={inputType}
               min={secondBounds.min}
-              max={secondBounds.max !== Number.MAX_SAFE_INTEGER ? secondBounds.max : undefined}
+              max={secondMax}
+              disabled={secondStat.automated}
               step={step}
               value={secondValue}
               onChange={(e) => handleStatChange(secondStat.id, e.target.value, undefined, firstStat.id)}
