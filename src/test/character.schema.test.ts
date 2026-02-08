@@ -12,7 +12,7 @@ import {
   validateRange,
   getValidationErrors,
 } from '@/schemas/character.schema';
-import { createEmptyCharacter, Species, CharacterClass } from '@/types/character.types';
+import { createEmptyCharacter, Species, CharacterClassEnum } from '@/types/character.types';
 
 describe('Character Schema Validation', () => {
   describe('validateCharacterSheet', () => {
@@ -38,7 +38,7 @@ describe('Character Schema Validation', () => {
       const character = {
         ...createEmptyCharacter(),
         name: 'Test Hero',
-        level: [{ class: CharacterClass.FIGHTER, level: 5 }],
+        level: [{ class: CharacterClassEnum.FIGHTER, level: 5 }],
         species: Species.ELF,
         attributes: {} // Empty attributes are valid with config-driven system
       };
