@@ -12,7 +12,7 @@ import {
   validateRange,
   getValidationErrors,
 } from '@/schemas/character.schema';
-import { createEmptyCharacter, Species, CharacterClassEnum } from '@/types/character.types';
+import { createEmptyCharacter, Species, CharacterClass } from '@/types/character.types';
 
 describe('Character Schema Validation', () => {
   describe('validateCharacterSheet', () => {
@@ -35,10 +35,18 @@ describe('Character Schema Validation', () => {
     });
 
     it('should validate character with valid data', () => {
+      const fighterStub: CharacterClass = {
+        name: "Fighter",
+        desc: "",
+        data: {
+          type: "martial",
+          "hp": 10
+        }
+      };
       const character = {
         ...createEmptyCharacter(),
         name: 'Test Hero',
-        level: [{ class: CharacterClassEnum.FIGHTER, level: 5 }],
+        level: [{ class: fighterStub, level: 5 }],
         species: Species.ELF,
         attributes: {} // Empty attributes are valid with config-driven system
       };

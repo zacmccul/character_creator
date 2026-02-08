@@ -7,7 +7,7 @@
  * Definition for enum data types (ClassData, etc)
  */
 export type ClassData = {
-  type: "martial" | "caster",
+  type: string,
   hp: number,
 };
 

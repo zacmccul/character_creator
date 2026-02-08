@@ -6,7 +6,6 @@
 import { z } from 'zod';
 import {
   Species,
-  CharacterClassEnum,
   Experience,
   EquipmentItem,
   ConsumableItem,
@@ -18,7 +17,14 @@ import {
 // ============================================================================
 
 export const SpeciesSchema = z.nativeEnum(Species);
-export const CharacterClassSchema = z.nativeEnum(CharacterClassEnum);
+export const CharacterClassSchema = z.object({
+  name: z.string(),
+  desc: z.string(),
+  data: z.object({
+    type: z.string(),
+    hp: z.number(),
+  })
+});
 export const ExperienceSchema = z.nativeEnum(Experience);
 export const EquipmentItemSchema = z.nativeEnum(EquipmentItem);
 export const ConsumableItemSchema = z.nativeEnum(ConsumableItem);

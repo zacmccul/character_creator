@@ -197,7 +197,7 @@ export const VersionHistoryModal = () => {
                       <Flex direction="column" gap={1}>
                         {previewData.characterData.level.map((lvl, idx) => (
                           <Text key={idx} fontSize="sm">
-                            {lvl.class} - Level {lvl.level}
+                            {lvl.class.name} - Level {lvl.level}
                           </Text>
                         ))}
                       </Flex>
