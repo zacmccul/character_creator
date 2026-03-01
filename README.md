@@ -170,6 +170,7 @@ The project automatically deploys to GitHub Pages when changes are pushed to the
 
 ### Documentation
 
+- **[Data Structures](docs/DATA_STRUCTURES.md)** - Guide for data structures 
 - **[Configuration System](docs/CONFIGURATION_SYSTEM.md)** - Complete guide to configuration files
 - **[Layout System](docs/LAYOUT_SYSTEM.md)** - How to customize the visual layout
 - **[Attribute Configuration](docs/ATTRIBUTE_CONFIGURATION.md)** - Deep dive on attribute configuration
